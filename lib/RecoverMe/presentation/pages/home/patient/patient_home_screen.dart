@@ -102,7 +102,7 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
             child: SmartRefresher(
               controller: refreshController,
               header: WaterDropHeader(
-                waterDropColor: Colors.purple,
+                waterDropColor:  RecoverColors.myColor,
                 refresh: const MyLoading(),
                 complete: Container(),
                 completeDuration: Duration.zero,

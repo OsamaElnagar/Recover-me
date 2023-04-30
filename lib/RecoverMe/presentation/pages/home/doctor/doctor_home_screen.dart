@@ -30,7 +30,8 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
   double screenHeight = 0;
   double screenWidth = 0;
   bool startAnimation = false;
-  RefreshController refreshController = RefreshController(initialRefresh: false);
+  RefreshController refreshController =
+      RefreshController(initialRefresh: false);
 
   @override
   void initState() {
@@ -73,7 +74,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                 child: SmartRefresher(
                   controller: refreshController,
                   header: WaterDropHeader(
-                    waterDropColor: Colors.purple,
+                    waterDropColor: RecoverColors.myColor,
                     refresh: const MyLoading(),
                     complete: Container(),
                     completeDuration: Duration.zero,
@@ -170,65 +171,80 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                                   radius:
                                       MediaQuery.of(context).size.width / 10,
                                   backgroundColor: Colors.white,
-                                  child: CachedNetworkImage(
-                                    imageUrl: dLModel.profileImage!,
-                                    progressIndicatorBuilder:
-                                        (context, url, progress) => Center(
-                                      child: CircularProgressIndicator(
-                                        value: progress.progress,
-                                      ),
-                                    ),
-                                    fit: BoxFit.cover,
-                                  ),
+                                  backgroundImage: CachedNetworkImageProvider(
+                                      dLModel.profileImage!),
+                                  // child: CachedNetworkImage(
+                                  //   imageUrl: dLModel.profileImage!,
+                                  //   progressIndicatorBuilder:
+                                  //       (context, url, progress) => Center(
+                                  //     child: CircularProgressIndicator(
+                                  //       value: progress.progress,
+                                  //     ),
+                                  //   ),
+                                  //   fit: BoxFit.cover,
+                                  // ),
                                 ),
                               ],
                             ),
                           ),
                           const SizedBox(height: 50),
-                          ConditionalBuilder(
-                            condition: cubit.patients.isNotEmpty,
-                            builder: (context) {
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              RecoverHeadlines(
+                                headline: 'Patients on Recover Me sphere',
+                                color: RecoverColors.myColor,
+                                fs: 20,
+                              ),
+                              const SizedBox(height: 20),
+                              ListView.separated(
+                                shrinkWrap: true,
+                                physics: const BouncingScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  return AnimatedContainer(
+                                    width: screenWidth,
+                                    curve: Curves.easeInOut,
+                                    duration: Duration(
+                                        milliseconds: 1000 + (index * 500)),
+                                    transform: Matrix4.translationValues(
+                                        startAnimation ? 0 : screenWidth,
+                                        0,
+                                        0),
+                                    child: BuildPatientItem(
+                                      patientLoginModel:
+                                      cubit.patients[index],
+                                    ),
+                                  );
+                                },
+                                separatorBuilder: (context, index) {
+                                  return recoverDivider(
+                                    height: 10.0,
+                                  );
+                                },
+                                itemCount: cubit.patients.length,
+                              ),
+                            ],
+                          ),
+                          if(cubit.patients.length==0)
+                          Center(
+                            child: SizedBox(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  RecoverHeadlines(
-                                    headline: 'Patients on Recover Me sphere',
+                                  const Icon(
+                                    Icons.hourglass_empty,
+                                    size: 150,
                                     color: RecoverColors.myColor,
-                                    fs: 20,
                                   ),
-                                  const SizedBox(height: 20),
-                                  ListView.separated(
-                                    shrinkWrap: true,
-                                    physics: const BouncingScrollPhysics(),
-                                    itemBuilder: (context, index) {
-                                      return AnimatedContainer(
-                                        width: screenWidth,
-                                        curve: Curves.easeInOut,
-                                        duration: Duration(
-                                            milliseconds: 1000 + (index * 500)),
-                                        transform: Matrix4.translationValues(
-                                            startAnimation ? 0 : screenWidth,
-                                            0,
-                                            0),
-                                        child: BuildPatientItem(
-                                          patientLoginModel:
-                                              cubit.patients[index],
-                                        ),
-                                      );
-                                    },
-                                    separatorBuilder: (context, index) {
-                                      return recoverDivider(
-                                        height: 10.0,
-                                      );
-                                    },
-                                    itemCount: cubit.patients.length,
+                                  RecoverHints(
+                                    hint:
+                                    'It seems that no patients has registered yet!\n Try to invite some.',
+                                    color: RecoverColors.myColor,
                                   ),
                                 ],
-                              );
-                            },
-                            fallback: (context) {
-                              return const SizedBox();
-                            },
+                              ),
+                            ),
                           ),
                           const SizedBox(height: 20),
                         ],
@@ -313,7 +329,8 @@ class BuildPatientItem extends StatelessWidget {
                       child: Row(
                         children: [
                           CircleAvatar(
-                            backgroundImage: NetworkImage(games[0].image),
+                            backgroundImage:
+                                CachedNetworkImageProvider(games[0].image),
                           ),
                           const SizedBox(
                             width: 5,
@@ -340,17 +357,74 @@ class BuildPatientItem extends StatelessWidget {
                       child: Row(
                         children: [
                           CircleAvatar(
-                            backgroundImage: NetworkImage(games[0].image),
+                            backgroundImage:
+                                CachedNetworkImageProvider(games[1].image),
                           ),
                           const SizedBox(
                             width: 5,
                           ),
-                          const Text('Game'),
+                          Text(games[1].name),
                         ],
                       ),
                     ),
                     onTap: () {
-                      // navigateTo(context, const PatientScore());
+                      //navigateTo(context, const PatientScore());
+                    },
+                  ),
+                  PopupMenuItem(
+                    child: InkWell(
+                      onTap: () {
+                        pint('tapped game');
+                        Navigator.pop(context);
+                        navigateTo(
+                            context,
+                            PatientScore(
+                              patientLoginModel: patientLoginModel,
+                            ));
+                      },
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundImage:
+                                CachedNetworkImageProvider(games[2].image),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(games[2].name),
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      //navigateTo(context, const PatientScore());
+                    },
+                  ),
+                  PopupMenuItem(
+                    child: InkWell(
+                      onTap: () {
+                        pint('tapped game');
+                        Navigator.pop(context);
+                        navigateTo(
+                            context,
+                            PatientScore(
+                              patientLoginModel: patientLoginModel,
+                            ));
+                      },
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundImage:
+                                CachedNetworkImageProvider(games[3].image),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(games[3].name),
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      //navigateTo(context, const PatientScore());
                     },
                   ),
                 ],

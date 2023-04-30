@@ -39,6 +39,7 @@ class _DoctorEditProfileState extends State<DoctorEditProfile> {
     nameNode.dispose();
     emailNode.dispose();
     phoneNode.dispose();
+
     super.dispose();
   }
 
@@ -48,7 +49,11 @@ class _DoctorEditProfileState extends State<DoctorEditProfile> {
       create: (context) => UpdateProfileCubit()..getDoctorModel(),
       child: BlocConsumer<UpdateProfileCubit, UpdateProfileStates>(
         listener: (context, state) {
-          if (state is UpdateProfileSuccessState) {
+          if (state is UpdateOnlyProfileImageSuccessState) {
+            showToast(msg: 'Updated Successfully', state: ToastStates.success);
+            RecoverCubit.get(context).getDoctorData();
+            navigate2(context, const DoctorHomeScreen());
+          } else if (state is UpdateProfileSuccessState) {
             showToast(msg: 'Updated Successfully', state: ToastStates.success);
             RecoverCubit.get(context).getDoctorData();
             navigate2(context, const DoctorHomeScreen());
@@ -73,6 +78,7 @@ class _DoctorEditProfileState extends State<DoctorEditProfile> {
                             const SizedBox(
                               height: 20,
                             ),
+
                             neumorphism(
                               onTap: () {
                                 Navigator.pop(context);
@@ -240,17 +246,22 @@ class _DoctorEditProfileState extends State<DoctorEditProfile> {
                                     if (cubit.profileImageFile != null) {
                                       cubit.updateOnlyDoProfileImage();
                                     }
-                                    cubit.updateDoctorProfile(
-                                      name: nameController.text != ''
-                                          ? nameController.text
-                                          : cubit.doctorLoginModel!.name,
-                                      email: emailController.text != ''
-                                          ? emailController.text
-                                          : cubit.doctorLoginModel!.email,
-                                      phone: phoneController.text != ''
-                                          ? phoneController.text
-                                          : cubit.doctorLoginModel!.phone,
-                                    );
+
+                                    if (nameController.text != '' ||
+                                        emailController.text != '' ||
+                                        phoneController.text != '') {
+                                      cubit.updateDoctorProfile(
+                                        name: nameController.text != ''
+                                            ? nameController.text
+                                            : cubit.doctorLoginModel!.name,
+                                        email: emailController.text != ''
+                                            ? emailController.text
+                                            : cubit.doctorLoginModel!.email,
+                                        phone: phoneController.text != ''
+                                            ? phoneController.text
+                                            : cubit.doctorLoginModel!.phone,
+                                      );
+                                    }
                                   }
                                 },
                                 buttonColor: RecoverColors.myColor,
@@ -281,7 +292,8 @@ class _DoctorEditProfileState extends State<DoctorEditProfile> {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 ElevatedButton.icon(
-                                  style: ElevatedButton.styleFrom(backgroundColor: RecoverColors.myColor),
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: RecoverColors.myColor),
                                   onPressed: () {
                                     cubit.logout(context);
                                   },
@@ -292,15 +304,17 @@ class _DoctorEditProfileState extends State<DoctorEditProfile> {
                                   label: const Text('Log out'), // <-- Text
                                 ),
                                 ElevatedButton.icon(
-                                  style: ElevatedButton.styleFrom(backgroundColor: RecoverColors.myColor),
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: RecoverColors.myColor),
                                   onPressed: () {
-                                    cubit.logout(context);
+                                    cubit.deleteDoctorAccount(context);
                                   },
                                   icon: const Icon(
                                     Icons.logout,
                                     size: 24.0,
                                   ),
-                                  label: const Text('Delete account'), // <-- Text
+                                  label:
+                                      const Text('Delete account'), // <-- Text
                                 ),
                               ],
                             ),

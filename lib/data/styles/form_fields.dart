@@ -73,6 +73,97 @@ class RecoverTextFormField extends StatelessWidget {
   }
 }
 
+class RecoverPhoneFormField extends StatelessWidget {
+  RecoverPhoneFormField({
+    Key? key,
+    required this.hintText,
+    required this.controller,
+    this.focusNode,
+    this.label,
+    this.validator,
+    this.onFieldSubmitted,
+    this.onChanged,
+    this.keyboardType,
+    this.textInputAction, required this.countryController,
+  }) : super(key: key);
+
+  final String hintText;
+  String? label;
+  String? Function(String?)? validator;
+  void Function(String)? onFieldSubmitted;
+  void Function(String)? onChanged;
+  final TextEditingController controller;
+  final TextEditingController countryController;
+  dynamic keyboardType;
+  final FocusNode? focusNode;
+  TextInputAction? textInputAction;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 70,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: RecoverColors.myColor.withOpacity(.7),
+      ),
+      child: Row(
+        children: [
+          const SizedBox(
+            width: 10,
+          ),
+          SizedBox(
+            width: 40,
+            child: TextField(
+              controller: countryController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+          const Text(
+            "|",
+            style: TextStyle(fontSize: 33, color: Colors.grey),
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          Expanded(
+            child: TextFormField(
+              textInputAction: textInputAction,
+              focusNode: focusNode,
+              controller: controller,
+              keyboardType: keyboardType,
+              style: GoogleFonts.montserrat(
+                color: RecoverColors.recoverWhite,
+              ),
+              decoration: InputDecoration(
+                  // label: RecoverHints(hint: label!),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: RecoverColors.recoverRed),
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                  ),
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: RecoverColors.recoverGrey),
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                  ),
+                  hintText: hintText,
+                  hintStyle: GoogleFonts.montserrat(
+                      color: RecoverColors.recoverGrey, fontWeight: FontWeight.w600),
+                  focusColor: RecoverColors.recoverRed,
+                  contentPadding: const EdgeInsets.all(30)),
+              validator: validator,
+              onFieldSubmitted: onFieldSubmitted,
+              onChanged: onChanged,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class RecoverPassFormField extends StatelessWidget {
   RecoverPassFormField({
     Key? key,

@@ -135,7 +135,7 @@ class _DocProfAndImageState extends State<DocProfAndImage> {
                             radius: 45,
                             backgroundImage: cubit.profileImageFile != null
                                 ? FileImage(cubit.profileImageFile!)
-                                : const AssetImage('assets/images/doctor.jpg')
+                                : const AssetImage('assets/images/doctor_avatar.jpg')
                                     as ImageProvider,
                           ),
                         ),

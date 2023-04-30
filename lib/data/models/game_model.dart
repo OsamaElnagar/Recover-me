@@ -33,8 +33,26 @@ class GameModel {
 List<GameModel> games = [
   GameModel(
     id: 1,
-    name: 'ArmyHandy',
+    name: 'Puzzle game',
     description: 'this game gives you a hand like a soldier hand.',
-    image: 'https://firebasestorage.googleapis.com/v0/b/recoverme-a017c.appspot.com/o/Games%2Fanimehand.jpg?alt=media&token=0548450e-d4fc-4893-a00c-a97a530212e7',
+    image: 'https://firebasestorage.googleapis.com/v0/b/recoverme-a017c.appspot.com/o/Games%2FPuzzle%20game.jpg?alt=media&token=f8826a69-1708-4995-9bb3-726caf7f3b44',
+  ),
+  GameModel(
+    id: 2,
+    name: 'Memory game (2D)',
+    description: 'this game gives you a hand like a soldier hand.',
+    image: 'https://firebasestorage.googleapis.com/v0/b/recoverme-a017c.appspot.com/o/Games%2FMemory%20game%202D.jpg?alt=media&token=95bbb2bb-3ca6-442f-81e1-d5b01d969506',
+  ),
+  GameModel(
+    id: 3,
+    name: 'Drag & Drop Game ',
+    description: 'this game gives you a hand like a soldier hand.',
+    image: 'https://firebasestorage.googleapis.com/v0/b/recoverme-a017c.appspot.com/o/Games%2Fdrag-drop.jpg?alt=media&token=421a61f0-a5ef-453c-8ee1-0123b430c9a0',
+  ),
+  GameModel(
+    id: 4,
+    name: 'Little Intelligence',
+    description: 'this game gives you a hand like a soldier hand.',
+    image: 'https://firebasestorage.googleapis.com/v0/b/recoverme-a017c.appspot.com/o/Games%2FLittle%20Intelligente.jpg?alt=media&token=8f2551df-d22e-4239-a814-11f6d58d22b2',
   ),
 ];

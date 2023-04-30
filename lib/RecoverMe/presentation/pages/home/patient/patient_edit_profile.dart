@@ -321,9 +321,7 @@ class _PatientEditProfileState extends State<PatientEditProfile> {
                                   backgroundColor: RecoverColors.myColor),
                               onPressed: () {
                                 cubit.logout(context);
-                                if (state is UpdateSignOutSuccessState) {
-                                  navigate2(context, const UserType());
-                                }
+
                               },
                               icon: const Icon(
                                 Icons.logout,
@@ -335,10 +333,8 @@ class _PatientEditProfileState extends State<PatientEditProfile> {
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: RecoverColors.myColor),
                               onPressed: () {
-                                cubit.deletePatientAccount();
-                                if (state is DeleteAccountSuccessState) {
-                                  navigate2(context, const UserType());
-                                }
+                                cubit.deletePatientAccount(context);
+
                               },
                               icon: const Icon(
                                 Icons.logout,

@@ -23,11 +23,19 @@ class _DoctorRegisterScreenState extends State<DoctorRegisterScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController passController = TextEditingController();
+  TextEditingController countryController = TextEditingController();
   var formKey = GlobalKey<FormState>();
   FocusNode emailNode = FocusNode();
   FocusNode nameNode = FocusNode();
   FocusNode phoneNode = FocusNode();
   FocusNode passNode = FocusNode();
+
+
+  @override
+  void initState() {
+    countryController.text = '+20';
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +80,7 @@ class _DoctorRegisterScreenState extends State<DoctorRegisterScreen> {
                           height: 40,
                         ),
                         RecoverHeadlines(
-                          headline: 'Create Account',
+                          headline: 'Create account for a Professional',
                           color: Colors.black,
                         ),
                         const SizedBox(
@@ -108,17 +116,11 @@ class _DoctorRegisterScreenState extends State<DoctorRegisterScreen> {
                         const SizedBox(
                           height: 20,
                         ),
-                        RecoverTextFormField(
+                        RecoverPhoneFormField(
                           hintText: 'phone',
                           controller: phoneController,
+                          countryController: countryController,
                           keyboardType: TextInputType.phone,
-                          textInputAction: TextInputAction.next,
-                          validator: (value) {
-                          //   if (value!.isEmpty) {
-                          //     return ' phone must not be empty';
-                          //   }
-                          //   return null;
-                          },
                         ),
                         const SizedBox(
                           height: 20,
@@ -159,7 +161,7 @@ class _DoctorRegisterScreenState extends State<DoctorRegisterScreen> {
                               if (formKey.currentState!.validate()) {
                                 DoctorRegisterCubit.get(context).registerDoctor(
                                   name: nameController.text,
-                                  phone: phoneController.text,
+                                  phone: countryController.text+phoneController.text,
                                   email: emailController.text.replaceAll(' ', ''),
                                   password: passController.text,
                                 );

@@ -34,6 +34,7 @@ class UpdateProfileCubit extends Cubit<UpdateProfileStates> {
     await FirebaseAuth.instance.signOut().then((value) {
       CacheHelper.removeData(key: 'uid');
       CacheHelper.removeData(key: 'isPatient');
+      navigate2(context, const UserType());
       emit(UpdateSignOutSuccessState());
     }).catchError((onError) {
       pint(onError.toString());
@@ -41,7 +42,7 @@ class UpdateProfileCubit extends Cubit<UpdateProfileStates> {
     });
   }
 
-  void deletePatientAccount() {
+  void deletePatientAccount(context) {
     emit(DeleteAccountLoadingState());
 
     firebase_storage.FirebaseStorage.instance
@@ -56,11 +57,13 @@ class UpdateProfileCubit extends Cubit<UpdateProfileStates> {
           .then((value) {})
           .catchError((onError) {
         pint(onError.toString());
+
         emit(DeleteAccountErrorState(onError.toString()));
       });
       CacheHelper.removeData(key: 'uid');
       CacheHelper.removeData(key: 'isPatient');
       FirebaseAuth.instance.currentUser!.delete();
+      navigate2(context, const UserType());
       emit(DeleteAccountSuccessState());
     })
         .catchError((e) {
@@ -69,7 +72,7 @@ class UpdateProfileCubit extends Cubit<UpdateProfileStates> {
 
   }
 
-  void deleteDoctorAccount() {
+  void deleteDoctorAccount(context) {
     emit(DeleteAccountLoadingState());
     firebase_storage.FirebaseStorage.instance
         .ref()
@@ -80,6 +83,7 @@ class UpdateProfileCubit extends Cubit<UpdateProfileStates> {
         .doc(uId)
         .delete()
         .then((value) {
+      navigate2(context, const UserType());
       emit(DeleteAccountSuccessState());
     }).catchError((onError) {
       pint(onError.toString());
@@ -232,7 +236,7 @@ class UpdateProfileCubit extends Cubit<UpdateProfileStates> {
     firebase_storage.FirebaseStorage.instance
         .ref()
         .child(
-            'profileImages/patients/$uId/${Uri.file(profileImageFile!.path).pathSegments.last}')
+            'profileImages/doctors/$uId/${Uri.file(profileImageFile!.path).pathSegments.last}')
         .putFile(profileImageFile!)
         .then((value) {
       value.ref.getDownloadURL().then((value) {

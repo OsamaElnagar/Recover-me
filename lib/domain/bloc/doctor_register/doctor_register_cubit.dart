@@ -293,4 +293,5 @@ class DoctorRegisterCubit extends Cubit<DRegisterStates> {
       emit(DRegisterUpdateProfileErrorState(onError.toString()));
     });
   }
+
 }

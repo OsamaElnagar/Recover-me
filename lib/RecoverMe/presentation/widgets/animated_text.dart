@@ -46,7 +46,7 @@ class _AnimatedTextState extends State<AnimatedText>
                 decoration: const BoxDecoration(),
                 child: const Image(
                   image: AssetImage(
-                    'assets/images/rehand.jpg',
+                    'assets/images/logo.png',
                   ),
                 ),
               ),

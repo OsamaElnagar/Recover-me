@@ -22,6 +22,7 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController passController = TextEditingController();
+  TextEditingController countryController = TextEditingController();
   var formKey = GlobalKey<FormState>();
   FocusNode emailNode = FocusNode();
   FocusNode nameNode = FocusNode();
@@ -29,13 +30,22 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen> {
   FocusNode passNode = FocusNode();
 
   @override
+  void initState() {
+    countryController.text = '+20';
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => PatientRegisterCubit(),
       child: BlocConsumer<PatientRegisterCubit, PRegisterStates>(
         listener: (context, state) {
           if (state is PRegisterCreateUserSuccessState) {
-            navigate2(context, LoginScreen(isPatient: true,));
+            navigate2(
+                context,
+                LoginScreen(
+                  isPatient: true,
+                ));
             showToast(msg: 'Joined successfully', state: ToastStates.success);
           }
           if (state is PRegisterCreateUserErrorState) {
@@ -65,7 +75,7 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen> {
                           height: 40,
                         ),
                         RecoverHeadlines(
-                          headline: 'Create Account for a Patient',
+                          headline: 'Create account for a Patient',
                           color: Colors.black,
                         ),
                         const SizedBox(
@@ -101,17 +111,11 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen> {
                         const SizedBox(
                           height: 20,
                         ),
-                        RecoverTextFormField(
+                        RecoverPhoneFormField(
                           hintText: 'phone',
                           controller: phoneController,
+                          countryController: countryController,
                           keyboardType: TextInputType.phone,
-                          textInputAction: TextInputAction.next,
-                          validator: (value) {
-                           //  if (value!.isEmpty) {
-                           //  //   return ' phone must not be empty';
-                           //  // }
-                           //  // return null;
-                           },
                         ),
                         const SizedBox(
                           height: 20,
@@ -146,14 +150,16 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen> {
                         // create a new account
                         Center(
                           child: recoverTextButton(
-                            width: MediaQuery.of(context).size.width*.6,
+                            width: MediaQuery.of(context).size.width * .6,
                             text: 'Create account',
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
-                                PatientRegisterCubit.get(context).registerPatient(
+                                PatientRegisterCubit.get(context)
+                                    .registerPatient(
                                   name: nameController.text,
-                                  phone: phoneController.text,
-                                  email: emailController.text.replaceAll(' ', ''),
+                                  phone: countryController.text+phoneController.text,
+                                  email:
+                                      emailController.text.replaceAll(' ', ''),
                                   password: passController.text,
                                 );
                               }
@@ -216,7 +222,11 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen> {
                             ),
                             TextButton(
                               onPressed: () {
-                                navigateTo(context, LoginScreen(isPatient: true,));
+                                navigateTo(
+                                    context,
+                                    LoginScreen(
+                                      isPatient: true,
+                                    ));
                               },
                               child: RecoverHints(
                                   hint: 'Sign in',
@@ -239,4 +249,3 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen> {
     );
   }
 }
-

@@ -5,12 +5,12 @@ import 'package:recover_me/RecoverMe/presentation/pages/home/patient/patient_edi
 import 'package:recover_me/RecoverMe/presentation/pages/home/user_type.dart';
 import 'package:recover_me/RecoverMe/presentation/pages/home/doctor/doctor_home_screen.dart';
 import 'package:recover_me/RecoverMe/presentation/pages/home/patient/patient_home_screen.dart';
+import 'package:recover_me/RecoverMe/presentation/pages/phone_verify.dart';
 import 'package:recover_me/RecoverMe/presentation/pages/splash/splash_screen.dart';
 import 'package:recover_me/domain/entities/blocObserver.dart';
 import 'RecoverMe/presentation/pages/onBoarding/on_boarding_screen.dart';
 import 'data/data_sources/consts.dart';
 import 'domain/bloc/recover/recover_cubit.dart';
-import 'domain/bloc/update_profile/update_profile_cubit.dart';
 import 'domain/entities/cache_helper.dart';
 
 Future<void> main() async {
@@ -69,7 +69,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
           primarySwatch: Colors.blue,
         ),
-        home: AppSplashScreen(stWidget: stWidget),
+        home:  AppSplashScreen(stWidget: stWidget),
       ),
     );
   }
