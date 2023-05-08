@@ -1,18 +1,16 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recover_me/RecoverMe/presentation/components/components.dart';
-import 'package:recover_me/RecoverMe/presentation/pages/home/patient/patient_home_screen.dart';
-import 'package:recover_me/RecoverMe/presentation/pages/home/patient/patient_prefs_screen.dart';
-import 'package:recover_me/RecoverMe/presentation/pages/home/user_type.dart';
-import 'package:recover_me/RecoverMe/presentation/widgets/neumorphism_button.dart';
-import 'package:recover_me/RecoverMe/presentation/widgets/recover_text_button.dart';
+import 'package:recover_me/presentation/components/components.dart';
+import 'package:recover_me/presentation/pages/home/patient/patient_home_screen.dart';
+import 'package:recover_me/presentation/pages/home/patient/patient_prefs_screen.dart';
+import 'package:recover_me/presentation/widgets/neumorphism_button.dart';
+import 'package:recover_me/presentation/widgets/recover_text_button.dart';
 import 'package:recover_me/data/styles/colors.dart';
 import 'package:recover_me/data/styles/form_fields.dart';
 import 'package:recover_me/data/styles/paddings.dart';
 import 'package:recover_me/data/styles/texts.dart';
 import 'package:recover_me/domain/bloc/recover/recover_cubit.dart';
-import 'package:recover_me/domain/entities/cache_helper.dart';
 import '../../../../../domain/bloc/update_profile/update_profile_cubit.dart';
 
 class PatientEditProfile extends StatefulWidget {
@@ -103,6 +101,8 @@ class _PatientEditProfileState extends State<PatientEditProfile> {
                                         keyboardType: TextInputType.name,
                                         textInputAction: TextInputAction.next,
                                         validator: (value) {
+                                          return null;
+
                                           // if (value!.isEmpty) {
                                           //   return ' name must not be empty';
                                           // }
@@ -221,6 +221,8 @@ class _PatientEditProfileState extends State<PatientEditProfile> {
                                   keyboardType: TextInputType.emailAddress,
                                   textInputAction: TextInputAction.next,
                                   validator: (value) {
+                                    return null;
+
                                     // if (value!.isEmpty) {
                                     //   return ' Email must not be empty';
                                     // }
@@ -238,6 +240,8 @@ class _PatientEditProfileState extends State<PatientEditProfile> {
                                   keyboardType: TextInputType.phone,
                                   textInputAction: TextInputAction.next,
                                   validator: (value) {
+                                    return null;
+
                                     // if (value!.isEmpty) {
                                     //   return ' phone must not be empty';
                                     // }
@@ -320,7 +324,29 @@ class _PatientEditProfileState extends State<PatientEditProfile> {
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: RecoverColors.myColor),
                               onPressed: () {
-                                cubit.logout(context);
+                                dialogMessage(
+                                  context: context,
+                                  title: const Text('Logout!'),
+                                  content: const Text('Are you sure!'),
+                                  actions: [
+                                    OutlinedButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      style: OutlinedButton.styleFrom(
+                                          backgroundColor: Colors.white),
+                                      child: const Text('No'),
+                                    ),
+                                    OutlinedButton(
+                                      onPressed: () {
+                                        cubit.logout(context);
+                                      },
+                                      style: OutlinedButton.styleFrom(
+                                          backgroundColor: Colors.red),
+                                      child: const Text('Yes'),
+                                    ),
+                                  ],
+                                );
 
                               },
                               icon: const Icon(
@@ -333,8 +359,30 @@ class _PatientEditProfileState extends State<PatientEditProfile> {
                               style: ElevatedButton.styleFrom(
                                   backgroundColor: RecoverColors.myColor),
                               onPressed: () {
-                                cubit.deletePatientAccount(context);
-
+                                dialogMessage(
+                                  context: context,
+                                  title: const Text('Delete account!'),
+                                  content: const Text('Are you sure!'),
+                                  actions: [
+                                    OutlinedButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      style: OutlinedButton.styleFrom(
+                                          backgroundColor: Colors.white),
+                                      child: const Text('No'),
+                                    ),
+                                    OutlinedButton(
+                                      onPressed: () {
+                                        cubit.deletePatientAccount(context);
+                                      },
+                                      style: OutlinedButton.styleFrom(
+                                          backgroundColor: Colors.red),
+                                      child: const Text('Yes'),
+                                    ),
+                                  ],
+                                );
+                                //cubit.deletePatientAccount(context);
                               },
                               icon: const Icon(
                                 Icons.logout,

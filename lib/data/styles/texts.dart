@@ -63,7 +63,7 @@ class RecoverHeadlines extends StatelessWidget {
       textAlign: textAlign ?? TextAlign.center,
       style: RecoverTextStyles.recoverHeadlines(color: color, fs: fs, fw: fw),
       overflow: overflow ?? TextOverflow.ellipsis,
-      maxLines: maxLines ?? 15,
+      maxLines: maxLines ?? 20,
     );
   }
 }

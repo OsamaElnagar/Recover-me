@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recover_me/RecoverMe/presentation/components/components.dart';
-import 'package:recover_me/RecoverMe/presentation/widgets/recover_text_button.dart';
+import 'package:recover_me/presentation/components/components.dart';
+import 'package:recover_me/presentation/widgets/recover_text_button.dart';
 import 'package:recover_me/data/styles/colors.dart';
 import 'package:recover_me/data/styles/fonts.dart';
 import 'package:recover_me/data/styles/paddings.dart';

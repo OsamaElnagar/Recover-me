@@ -1,62 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recover_me/RecoverMe/presentation/pages/home/doctor/doctor_professsion_screen.dart';
-import 'package:recover_me/RecoverMe/presentation/pages/home/patient/patient_prefs_screen.dart';
-import 'package:recover_me/RecoverMe/presentation/pages/home/user_type.dart';
-import 'package:recover_me/RecoverMe/presentation/widgets/recover_text_button.dart';
+import 'package:recover_me/presentation/widgets/neumorphism_button.dart';
+import 'package:recover_me/presentation/widgets/recover_text_button.dart';
 import 'package:recover_me/data/styles/colors.dart';
 import 'package:recover_me/data/styles/form_fields.dart';
 import 'package:recover_me/data/styles/paddings.dart';
 import 'package:recover_me/data/styles/texts.dart';
-import 'package:recover_me/domain/bloc/login/login_cubit.dart';
-import 'package:recover_me/domain/bloc/recover/recover_cubit.dart';
-import '../../../../../data/data_sources/consts.dart';
-import '../../../../../domain/entities/cache_helper.dart';
+import 'package:recover_me/domain/bloc/doctor_register/doctor_register_cubit.dart';
 import '../../../components/components.dart';
+import '../../home/doctor/doctor_professsion_screen.dart';
+import '../login/login_screen.dart';
 
-class LoginScreen extends StatelessWidget {
-  bool? isPatient;
+class DoctorRegisterScreen extends StatefulWidget {
+  const DoctorRegisterScreen({Key? key}) : super(key: key);
 
-  LoginScreen({super.key, this.isPatient});
+  @override
+  State<DoctorRegisterScreen> createState() => _DoctorRegisterScreenState();
+}
 
+class _DoctorRegisterScreenState extends State<DoctorRegisterScreen> {
+  TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-
+  TextEditingController phoneController = TextEditingController();
   TextEditingController passController = TextEditingController();
-
+  TextEditingController countryController = TextEditingController();
   var formKey = GlobalKey<FormState>();
-
   FocusNode emailNode = FocusNode();
-
+  FocusNode nameNode = FocusNode();
+  FocusNode phoneNode = FocusNode();
   FocusNode passNode = FocusNode();
+
+
+  @override
+  void initState() {
+    countryController.text = '+20';
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery.of(context).size.width;
-    var screenHeight = MediaQuery.of(context).size.height;
-
     return BlocProvider(
-      create: (context) => LoginCubit(),
-      child: BlocConsumer<LoginCubit, LoginStates>(
+      create: (context) => DoctorRegisterCubit(),
+      child: BlocConsumer<DoctorRegisterCubit, DRegisterStates>(
         listener: (context, state) {
-          if (state is LoginSuccessState) {
-            CacheHelper.saveData(key: 'uid', value: state.uId);
-            uId = CacheHelper.getData('uid');
-
-            if (isPatient == true) {
-              RecoverCubit.get(context).getPatientData();
-              navigate2(context, const PatientPrefsScreen());
-            } else {
-              RecoverCubit.get(context).getDoctorData();
-              navigate2(context, const DocProfAndImage());
-            }
-            showToast(msg: 'login successfully', state: ToastStates.success);
+          if (state is DRegisterCreateUserSuccessState) {
+            navigate2(context, LoginScreen(isPatient: false,));
+            showToast(msg: 'Joined successfully', state: ToastStates.success);
           }
-          if (state is LoginErrorState) {
-            showToast(msg: 'Wrong email or password', state: ToastStates.error);
+
+          if (state is DRegisterWithGoogleSuccessState) {
+            navigate2(context, const DocProfAndImage());
+            showToast(msg: 'Joined successfully', state: ToastStates.success);
+          }
+
+          if (state is DRegisterCreateUserErrorState) {
+            showToast(msg: 'Invalid data', state: ToastStates.error);
           }
         },
         builder: (context, state) {
-          var cubit = LoginCubit.get(context);
+          var cubit = DoctorRegisterCubit.get(context);
+
           return Scaffold(
             body: SafeArea(
               child: SingleChildScrollView(
@@ -65,23 +68,38 @@ class LoginScreen extends StatelessWidget {
                     key: formKey,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          height: screenHeight * .1,
-                        ),
-                        // nuemorph(
-                        //   onTap: () => Navigator.pop(context),
-                        // ),
                         const SizedBox(
-                          height: 30,
+                          height: 20,
+                        ),
+                        neumorphism(
+                          onTap: () => Navigator.pop(context),
+                        ),
+                        const SizedBox(
+                          height: 40,
                         ),
                         RecoverHeadlines(
-                          headline: 'Login your account',
+                          headline: 'Create account for a Professional',
                           color: Colors.black,
                         ),
-                        SizedBox(
-                          height: screenHeight * .1,
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        RecoverTextFormField(
+                          hintText: 'name',
+                          controller: nameController,
+                          keyboardType: TextInputType.name,
+                          textInputAction: TextInputAction.next,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return ' name must not be empty';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
                         ),
                         RecoverTextFormField(
                           hintText: 'email',
@@ -98,7 +116,15 @@ class LoginScreen extends StatelessWidget {
                         const SizedBox(
                           height: 20,
                         ),
-
+                        RecoverPhoneFormField(
+                          hintText: 'phone',
+                          controller: phoneController,
+                          countryController: countryController,
+                          keyboardType: TextInputType.phone,
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
                         RecoverPassFormField(
                           label: 'Password',
                           onChanged: (p0) {
@@ -109,7 +135,7 @@ class LoginScreen extends StatelessWidget {
                           hintText: 'Password',
                           controller: passController,
                           keyboardType: TextInputType.visiblePassword,
-                          loginCubit: cubit,
+                          dRegisterCubit: cubit,
                           validator: (p0) {
                             if (p0!.isEmpty) {
                               return ' password cannot be empty';
@@ -129,16 +155,14 @@ class LoginScreen extends StatelessWidget {
                         // create a new account
                         Center(
                           child: recoverTextButton(
-                            text: 'Login',
+                            width: MediaQuery.of(context).size.width*.6,
+                            text: 'Create account',
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
-
-
-
-                                LoginCubit.get(context).userLogin(
-                                  email: emailController.text
-                                      .replaceAll(' ', '')
-                                      .toString(),
+                                DoctorRegisterCubit.get(context).registerDoctor(
+                                  name: nameController.text,
+                                  phone: countryController.text+phoneController.text,
+                                  email: emailController.text.replaceAll(' ', ''),
                                   password: passController.text,
                                 );
                               }
@@ -150,12 +174,12 @@ class LoginScreen extends StatelessWidget {
                         const SizedBox(
                           height: 5,
                         ),
-                        if (state is LoginLoadingState)
+                        if (state is DRegisterLoadingState)
                           const LinearProgressIndicator(
                             color: RecoverColors.myColor,
                           ),
-                        SizedBox(
-                          height: screenHeight * .1,
+                        const SizedBox(
+                          height: 20,
                         ),
                         // Sign up with google
                         Center(
@@ -182,7 +206,7 @@ class LoginScreen extends StatelessWidget {
                                   ),
                                   const Spacer(),
                                   RecoverNormalTexts(
-                                    norText: 'Sign in with Google',
+                                    norText: 'Sign Up with Google',
                                     color: RecoverColors.myColor,
                                   ),
                                 ],
@@ -196,15 +220,15 @@ class LoginScreen extends StatelessWidget {
                         Row(
                           children: [
                             RecoverHints(
-                              hint: 'Do not have an account',
+                              hint: 'Already have an account',
                               color: Colors.black,
                             ),
                             TextButton(
                               onPressed: () {
-                                navigateTo(context, const UserType());
+                                navigateTo(context, LoginScreen(isPatient: false,));
                               },
                               child: RecoverHints(
-                                  hint: 'Sign up',
+                                  hint: 'Sign in',
                                   color: RecoverColors.myColor),
                             ),
                           ],

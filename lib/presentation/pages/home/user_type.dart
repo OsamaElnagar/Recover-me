@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
-import 'package:recover_me/RecoverMe/presentation/components/components.dart';
-import 'package:recover_me/RecoverMe/presentation/pages/auth/register/doctor_register_screen.dart';
-import 'package:recover_me/RecoverMe/presentation/pages/auth/register/patient_register_screen.dart';
+import 'package:recover_me/presentation/components/components.dart';
+import 'package:recover_me/presentation/pages/auth/register/doctor_register_screen.dart';
+import 'package:recover_me/presentation/pages/auth/register/patient_register_screen.dart';
 import 'package:recover_me/data/data_sources/consts.dart';
 import 'package:recover_me/data/styles/colors.dart';
 import 'package:recover_me/data/styles/texts.dart';

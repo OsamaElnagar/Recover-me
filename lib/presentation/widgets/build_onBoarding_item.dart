@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:palette_generator/palette_generator.dart';
 import '../../../data/models/boardingModel.dart';
 import '../../../data/styles/colors.dart';
 import '../../../data/styles/texts.dart';
 
 class OnBoardingBuilder extends StatelessWidget {
-  OnBoardingBuilder({Key? key, required this.boardingModel}) : super(key: key);
+  const OnBoardingBuilder({Key? key, required this.boardingModel}) : super(key: key);
 
   final BoardingModel boardingModel;
 
-  PaletteGenerator? paletteGenerator;
 
-  void getPaletteColor() async {
-    ImageProvider image = AssetImage(boardingModel.image);
-    paletteGenerator = await PaletteGenerator.fromImageProvider(image);
-  }
 
   @override
   Widget build(BuildContext context) {

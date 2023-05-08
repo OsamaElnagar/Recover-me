@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:recover_me/data/models/patient_login_model.dart';
-import '../../../RecoverMe/presentation/components/components.dart';
+import '../../../presentation/components/components.dart';
 import '../../../data/data_sources/consts.dart';
 
 part 'patient_register_state.dart';

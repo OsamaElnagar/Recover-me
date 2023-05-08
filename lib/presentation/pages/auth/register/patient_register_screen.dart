@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recover_me/RecoverMe/presentation/widgets/neumorphism_button.dart';
-import 'package:recover_me/RecoverMe/presentation/widgets/recover_text_button.dart';
+import 'package:recover_me/presentation/widgets/neumorphism_button.dart';
+import 'package:recover_me/presentation/widgets/recover_text_button.dart';
 import 'package:recover_me/data/styles/colors.dart';
 import 'package:recover_me/data/styles/form_fields.dart';
 import 'package:recover_me/data/styles/paddings.dart';
 import 'package:recover_me/data/styles/texts.dart';
-import 'package:recover_me/domain/bloc/doctor_register/doctor_register_cubit.dart';
+import '../../../../../domain/bloc/patient_register/patient_register_cubit.dart';
 import '../../../components/components.dart';
-import '../../home/doctor/doctor_professsion_screen.dart';
 import '../login/login_screen.dart';
 
-class DoctorRegisterScreen extends StatefulWidget {
-  const DoctorRegisterScreen({Key? key}) : super(key: key);
+class PatientRegisterScreen extends StatefulWidget {
+  const PatientRegisterScreen({Key? key}) : super(key: key);
 
   @override
-  State<DoctorRegisterScreen> createState() => _DoctorRegisterScreenState();
+  State<PatientRegisterScreen> createState() => _PatientRegisterScreenState();
 }
 
-class _DoctorRegisterScreenState extends State<DoctorRegisterScreen> {
+class _PatientRegisterScreenState extends State<PatientRegisterScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -30,35 +29,31 @@ class _DoctorRegisterScreenState extends State<DoctorRegisterScreen> {
   FocusNode phoneNode = FocusNode();
   FocusNode passNode = FocusNode();
 
-
   @override
   void initState() {
     countryController.text = '+20';
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => DoctorRegisterCubit(),
-      child: BlocConsumer<DoctorRegisterCubit, DRegisterStates>(
+      create: (context) => PatientRegisterCubit(),
+      child: BlocConsumer<PatientRegisterCubit, PRegisterStates>(
         listener: (context, state) {
-          if (state is DRegisterCreateUserSuccessState) {
-            navigate2(context, LoginScreen(isPatient: false,));
+          if (state is PRegisterCreateUserSuccessState) {
+            navigate2(
+                context,
+                LoginScreen(
+                  isPatient: true,
+                ));
             showToast(msg: 'Joined successfully', state: ToastStates.success);
           }
-
-          if (state is DRegisterWithGoogleSuccessState) {
-            navigate2(context, const DocProfAndImage());
-            showToast(msg: 'Joined successfully', state: ToastStates.success);
-          }
-
-          if (state is DRegisterCreateUserErrorState) {
+          if (state is PRegisterCreateUserErrorState) {
             showToast(msg: 'Invalid data', state: ToastStates.error);
           }
         },
         builder: (context, state) {
-          var cubit = DoctorRegisterCubit.get(context);
+          var cubit = PatientRegisterCubit.get(context);
 
           return Scaffold(
             body: SafeArea(
@@ -80,7 +75,7 @@ class _DoctorRegisterScreenState extends State<DoctorRegisterScreen> {
                           height: 40,
                         ),
                         RecoverHeadlines(
-                          headline: 'Create account for a Professional',
+                          headline: 'Create account for a Patient',
                           color: Colors.black,
                         ),
                         const SizedBox(
@@ -135,7 +130,7 @@ class _DoctorRegisterScreenState extends State<DoctorRegisterScreen> {
                           hintText: 'Password',
                           controller: passController,
                           keyboardType: TextInputType.visiblePassword,
-                          dRegisterCubit: cubit,
+                          pRegisterCubit: cubit,
                           validator: (p0) {
                             if (p0!.isEmpty) {
                               return ' password cannot be empty';
@@ -155,14 +150,16 @@ class _DoctorRegisterScreenState extends State<DoctorRegisterScreen> {
                         // create a new account
                         Center(
                           child: recoverTextButton(
-                            width: MediaQuery.of(context).size.width*.6,
+                            width: MediaQuery.of(context).size.width * .6,
                             text: 'Create account',
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
-                                DoctorRegisterCubit.get(context).registerDoctor(
+                                PatientRegisterCubit.get(context)
+                                    .registerPatient(
                                   name: nameController.text,
                                   phone: countryController.text+phoneController.text,
-                                  email: emailController.text.replaceAll(' ', ''),
+                                  email:
+                                      emailController.text.replaceAll(' ', ''),
                                   password: passController.text,
                                 );
                               }
@@ -174,7 +171,7 @@ class _DoctorRegisterScreenState extends State<DoctorRegisterScreen> {
                         const SizedBox(
                           height: 5,
                         ),
-                        if (state is DRegisterLoadingState)
+                        if (state is PRegisterLoadingState)
                           const LinearProgressIndicator(
                             color: RecoverColors.myColor,
                           ),
@@ -184,9 +181,7 @@ class _DoctorRegisterScreenState extends State<DoctorRegisterScreen> {
                         // Sign up with google
                         Center(
                           child: GestureDetector(
-                            onTap: () {
-                              cubit.signInWithGoogle();
-                            },
+                            onTap: () {},
                             child: Container(
                               padding: const EdgeInsets.all(5),
                               width: MediaQuery.of(context).size.width * .7,
@@ -208,6 +203,7 @@ class _DoctorRegisterScreenState extends State<DoctorRegisterScreen> {
                                   RecoverNormalTexts(
                                     norText: 'Sign Up with Google',
                                     color: RecoverColors.myColor,
+                                    fs: 18.0,
                                   ),
                                 ],
                               ),
@@ -218,6 +214,7 @@ class _DoctorRegisterScreenState extends State<DoctorRegisterScreen> {
                           height: 20,
                         ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             RecoverHints(
                               hint: 'Already have an account',
@@ -225,7 +222,11 @@ class _DoctorRegisterScreenState extends State<DoctorRegisterScreen> {
                             ),
                             TextButton(
                               onPressed: () {
-                                navigateTo(context, LoginScreen(isPatient: false,));
+                                navigateTo(
+                                    context,
+                                    LoginScreen(
+                                      isPatient: true,
+                                    ));
                               },
                               child: RecoverHints(
                                   hint: 'Sign in',
@@ -248,4 +249,3 @@ class _DoctorRegisterScreenState extends State<DoctorRegisterScreen> {
     );
   }
 }
-

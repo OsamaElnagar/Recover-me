@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
-import 'package:recover_me/RecoverMe/presentation/components/components.dart';
-import 'package:recover_me/RecoverMe/presentation/pages/phone_verify.dart';
+import 'package:recover_me/presentation/components/components.dart';
+import 'package:recover_me/presentation/pages/phone_verify.dart';
 
 class MyVerify extends StatefulWidget {
   const MyVerify({Key? key}) : super(key: key);
@@ -94,7 +94,7 @@ class _MyVerifyState extends State<MyVerify> {
                 // submittedPinTheme: submittedPinTheme,
                 onChanged: (value) => code = value,
                 showCursor: true,
-                onCompleted: (pin) => print(pin),
+                onCompleted: (pin) => pint(pin.toString()),
               ),
               const SizedBox(
                 height: 20,

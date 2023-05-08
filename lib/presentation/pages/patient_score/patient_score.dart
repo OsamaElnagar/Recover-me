@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recover_me/RecoverMe/presentation/pages/points_line_charts.dart';
+import 'package:recover_me/presentation/pages/points_line_charts.dart';
 import 'package:recover_me/data/models/patient_login_model.dart';
 import 'package:recover_me/data/styles/paddings.dart';
 import 'package:recover_me/data/styles/texts.dart';
@@ -8,7 +8,7 @@ import 'package:recover_me/domain/bloc/recover/recover_cubit.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../data/models/score_model.dart';
 import '../../../../data/styles/colors.dart';
-import 'package:recover_me/RecoverMe/presentation/manager/dateTime_manager.dart'
+import 'package:recover_me/presentation/manager/dateTime_manager.dart'
     as date_util;
 
 class PatientScore extends StatefulWidget {
@@ -43,7 +43,7 @@ class _PatientScoreState extends State<PatientScore> {
     currentMonthList.sort((a, b) => a.day.compareTo(b.day));
     currentMonthList = currentMonthList.toSet().toList();
     horizontalScrollController =
-        ScrollController(initialScrollOffset: 100.0 * currentDateTime.day);
+        ScrollController(initialScrollOffset: 70.0 * currentDateTime.day);
     super.initState();
   }
 

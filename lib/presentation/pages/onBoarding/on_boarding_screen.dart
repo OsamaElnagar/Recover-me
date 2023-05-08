@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:palette_generator/palette_generator.dart';
-import 'package:recover_me/RecoverMe/presentation/pages/home/user_type.dart';
+import 'package:recover_me/presentation/pages/home/user_type.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../../data/data_sources/consts.dart';
 import '../../../../data/models/boardingModel.dart';
 import '../../../../data/styles/colors.dart';
-import '../../../../data/styles/fonts.dart';
 import '../../../../domain/bloc/recover/recover_cubit.dart';
 import '../../../../domain/entities/cache_helper.dart';
 import '../../components/components.dart';

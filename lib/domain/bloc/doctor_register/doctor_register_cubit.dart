@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'package:bloc/bloc.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:recover_me/data/data_sources/consts.dart';
-import '../../../RecoverMe/presentation/components/components.dart';
+import '../../../presentation/components/components.dart';
 import '../../../data/models/doctor_login_model.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:google_sign_in/google_sign_in.dart';

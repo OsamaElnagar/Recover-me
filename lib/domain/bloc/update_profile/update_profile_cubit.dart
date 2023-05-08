@@ -3,17 +3,14 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:recover_me/data/data_sources/consts.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:recover_me/domain/bloc/recover/recover_cubit.dart';
 import 'package:recover_me/domain/entities/cache_helper.dart';
-
-import '../../../RecoverMe/presentation/components/components.dart';
-import '../../../RecoverMe/presentation/pages/home/user_type.dart';
+import '../../../presentation/components/components.dart';
+import '../../../presentation/pages/home/user_type.dart';
 import '../../../data/models/doctor_login_model.dart';
 import '../../../data/models/patient_login_model.dart';
 

@@ -6,7 +6,7 @@ import 'package:recover_me/data/styles/colors.dart';
 import 'package:recover_me/data/styles/paddings.dart';
 
 class ErrorOccurred extends StatefulWidget {
-  ErrorOccurred({Key? key}) : super(key: key);
+  const ErrorOccurred({Key? key}) : super(key: key);
 
   @override
   State<ErrorOccurred> createState() => _ErrorOccurredState();

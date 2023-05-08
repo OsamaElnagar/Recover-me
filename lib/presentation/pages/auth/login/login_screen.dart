@@ -1,60 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recover_me/RecoverMe/presentation/widgets/neumorphism_button.dart';
-import 'package:recover_me/RecoverMe/presentation/widgets/recover_text_button.dart';
+import 'package:recover_me/presentation/pages/home/doctor/doctor_professsion_screen.dart';
+import 'package:recover_me/presentation/pages/home/patient/patient_prefs_screen.dart';
+import 'package:recover_me/presentation/pages/home/user_type.dart';
+import 'package:recover_me/presentation/widgets/recover_text_button.dart';
 import 'package:recover_me/data/styles/colors.dart';
 import 'package:recover_me/data/styles/form_fields.dart';
 import 'package:recover_me/data/styles/paddings.dart';
 import 'package:recover_me/data/styles/texts.dart';
-import '../../../../../domain/bloc/patient_register/patient_register_cubit.dart';
+import 'package:recover_me/domain/bloc/login/login_cubit.dart';
+import 'package:recover_me/domain/bloc/recover/recover_cubit.dart';
+import '../../../../../data/data_sources/consts.dart';
+import '../../../../../domain/entities/cache_helper.dart';
 import '../../../components/components.dart';
-import '../login/login_screen.dart';
 
-class PatientRegisterScreen extends StatefulWidget {
-  const PatientRegisterScreen({Key? key}) : super(key: key);
+class LoginScreen extends StatelessWidget {
+  bool? isPatient;
 
-  @override
-  State<PatientRegisterScreen> createState() => _PatientRegisterScreenState();
-}
+  LoginScreen({super.key, this.isPatient});
 
-class _PatientRegisterScreenState extends State<PatientRegisterScreen> {
-  TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
+
   TextEditingController passController = TextEditingController();
-  TextEditingController countryController = TextEditingController();
+
   var formKey = GlobalKey<FormState>();
+
   FocusNode emailNode = FocusNode();
-  FocusNode nameNode = FocusNode();
-  FocusNode phoneNode = FocusNode();
+
   FocusNode passNode = FocusNode();
 
   @override
-  void initState() {
-    countryController.text = '+20';
-    super.initState();
-  }
-  @override
   Widget build(BuildContext context) {
+    var screenWidth = MediaQuery.of(context).size.width;
+    var screenHeight = MediaQuery.of(context).size.height;
+
     return BlocProvider(
-      create: (context) => PatientRegisterCubit(),
-      child: BlocConsumer<PatientRegisterCubit, PRegisterStates>(
+      create: (context) => LoginCubit(),
+      child: BlocConsumer<LoginCubit, LoginStates>(
         listener: (context, state) {
-          if (state is PRegisterCreateUserSuccessState) {
-            navigate2(
-                context,
-                LoginScreen(
-                  isPatient: true,
-                ));
-            showToast(msg: 'Joined successfully', state: ToastStates.success);
+          if (state is LoginSuccessState) {
+            CacheHelper.saveData(key: 'uid', value: state.uId);
+            uId = CacheHelper.getData('uid');
+
+            if (isPatient == true) {
+              RecoverCubit.get(context).getPatientData();
+              navigate2(context, const PatientPrefsScreen());
+            } else {
+              RecoverCubit.get(context).getDoctorData();
+              navigate2(context, const DocProfAndImage());
+            }
+            showToast(msg: 'login successfully', state: ToastStates.success);
           }
-          if (state is PRegisterCreateUserErrorState) {
-            showToast(msg: 'Invalid data', state: ToastStates.error);
+          if (state is LoginErrorState) {
+            showToast(msg: 'Wrong email or password', state: ToastStates.error);
           }
         },
         builder: (context, state) {
-          var cubit = PatientRegisterCubit.get(context);
-
+          var cubit = LoginCubit.get(context);
           return Scaffold(
             body: SafeArea(
               child: SingleChildScrollView(
@@ -63,38 +65,23 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen> {
                     key: formKey,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(
-                          height: 20,
+                        SizedBox(
+                          height: screenHeight * .1,
                         ),
-                        neumorphism(
-                          onTap: () => Navigator.pop(context),
-                        ),
+                        // nuemorph(
+                        //   onTap: () => Navigator.pop(context),
+                        // ),
                         const SizedBox(
-                          height: 40,
+                          height: 30,
                         ),
                         RecoverHeadlines(
-                          headline: 'Create account for a Patient',
+                          headline: 'Login your account',
                           color: Colors.black,
                         ),
-                        const SizedBox(
-                          height: 40,
-                        ),
-                        RecoverTextFormField(
-                          hintText: 'name',
-                          controller: nameController,
-                          keyboardType: TextInputType.name,
-                          textInputAction: TextInputAction.next,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return ' name must not be empty';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(
-                          height: 20,
+                        SizedBox(
+                          height: screenHeight * .1,
                         ),
                         RecoverTextFormField(
                           hintText: 'email',
@@ -111,15 +98,7 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen> {
                         const SizedBox(
                           height: 20,
                         ),
-                        RecoverPhoneFormField(
-                          hintText: 'phone',
-                          controller: phoneController,
-                          countryController: countryController,
-                          keyboardType: TextInputType.phone,
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
+
                         RecoverPassFormField(
                           label: 'Password',
                           onChanged: (p0) {
@@ -130,7 +109,7 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen> {
                           hintText: 'Password',
                           controller: passController,
                           keyboardType: TextInputType.visiblePassword,
-                          pRegisterCubit: cubit,
+                          loginCubit: cubit,
                           validator: (p0) {
                             if (p0!.isEmpty) {
                               return ' password cannot be empty';
@@ -150,16 +129,16 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen> {
                         // create a new account
                         Center(
                           child: recoverTextButton(
-                            width: MediaQuery.of(context).size.width * .6,
-                            text: 'Create account',
+                            text: 'Login',
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
-                                PatientRegisterCubit.get(context)
-                                    .registerPatient(
-                                  name: nameController.text,
-                                  phone: countryController.text+phoneController.text,
-                                  email:
-                                      emailController.text.replaceAll(' ', ''),
+
+
+
+                                LoginCubit.get(context).userLogin(
+                                  email: emailController.text
+                                      .replaceAll(' ', '')
+                                      .toString(),
                                   password: passController.text,
                                 );
                               }
@@ -171,17 +150,19 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen> {
                         const SizedBox(
                           height: 5,
                         ),
-                        if (state is PRegisterLoadingState)
+                        if (state is LoginLoadingState)
                           const LinearProgressIndicator(
                             color: RecoverColors.myColor,
                           ),
-                        const SizedBox(
-                          height: 20,
+                        SizedBox(
+                          height: screenHeight * .1,
                         ),
                         // Sign up with google
                         Center(
                           child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              cubit.signInWithGoogle();
+                            },
                             child: Container(
                               padding: const EdgeInsets.all(5),
                               width: MediaQuery.of(context).size.width * .7,
@@ -201,9 +182,8 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen> {
                                   ),
                                   const Spacer(),
                                   RecoverNormalTexts(
-                                    norText: 'Sign Up with Google',
+                                    norText: 'Sign in with Google',
                                     color: RecoverColors.myColor,
-                                    fs: 18.0,
                                   ),
                                 ],
                               ),
@@ -214,22 +194,17 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen> {
                           height: 20,
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             RecoverHints(
-                              hint: 'Already have an account',
+                              hint: 'Do not have an account',
                               color: Colors.black,
                             ),
                             TextButton(
                               onPressed: () {
-                                navigateTo(
-                                    context,
-                                    LoginScreen(
-                                      isPatient: true,
-                                    ));
+                                navigateTo(context, const UserType());
                               },
                               child: RecoverHints(
-                                  hint: 'Sign in',
+                                  hint: 'Sign up',
                                   color: RecoverColors.myColor),
                             ),
                           ],
@@ -249,3 +224,4 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen> {
     );
   }
 }
+

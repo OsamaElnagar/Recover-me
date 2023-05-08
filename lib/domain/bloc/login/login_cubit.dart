@@ -1,10 +1,9 @@
-import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../../../RecoverMe/presentation/components/components.dart';
+import '../../../presentation/components/components.dart';
 import '../../../data/data_sources/consts.dart';
 import '../../../data/models/doctor_login_model.dart';
 

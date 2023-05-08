@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:recover_me/RecoverMe/presentation/components/components.dart';
-import 'package:recover_me/RecoverMe/presentation/pages/verify.dart';
+import 'package:recover_me/presentation/components/components.dart';
+import 'package:recover_me/presentation/pages/verify.dart';
 import 'package:recover_me/data/styles/colors.dart';
 import 'package:recover_me/data/styles/texts.dart';
 
