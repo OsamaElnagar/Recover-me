@@ -112,7 +112,7 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
                       InkWell(
                         onTap: () {
 
-                          //navigateTo(context, const PatientEditProfile());
+                          navigateTo(context, const PatientEditProfile());
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width,

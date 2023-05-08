@@ -158,6 +158,9 @@ class _DoctorRegisterScreenState extends State<DoctorRegisterScreen> {
                             width: MediaQuery.of(context).size.width*.6,
                             text: 'Create account',
                             onPressed: () {
+                              if(phoneController.text[0]=='0'){
+                                phoneController.text = phoneController.text.replaceFirst(RegExp(r'^.'), '');
+                              }
                               if (formKey.currentState!.validate()) {
                                 DoctorRegisterCubit.get(context).registerDoctor(
                                   name: nameController.text,

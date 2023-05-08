@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:recover_me/data/models/patient_login_model.dart';
 import '../../../presentation/components/components.dart';
@@ -34,7 +35,8 @@ class PatientRegisterCubit extends Cubit<PRegisterStates> {
     'Neurological disorders',
     'Multiple sclerosis',
   ];
-
+  PatientLoginModel? pLoginModel;
+  PatientLoginModel? demoLoginModel;
 
   String dropdownValue = 'General Health Patients';
 
@@ -51,7 +53,6 @@ class PatientRegisterCubit extends Cubit<PRegisterStates> {
     emit(ChangePasswordVisibilityState());
   }
 
-  PatientLoginModel? pLoginModel;
 
   void registerPatient({
     required String name,
@@ -112,6 +113,48 @@ class PatientRegisterCubit extends Cubit<PRegisterStates> {
       emit(PRegisterCreateUserErrorState(onError));
     });
   }
+  Future<UserCredential> signInWithGoogle() async {
+    emit(PRegisterWithGoogleLoadingState());
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+    await googleUser?.authentication;
+
+    // Create a new credential
+    final OAuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    final UserCredential authResult =
+    await FirebaseAuth.instance.signInWithCredential(credential);
+    final user = authResult.user;
+
+    Map<String, dynamic> json = {
+      'name': user!.displayName.toString(),
+      'email': user.email.toString(),
+      'phone': user.phoneNumber.toString(),
+      'profileImage': user.photoURL.toString(),
+      'uId': user.uid.toString(),
+    };
+
+    demoLoginModel = PatientLoginModel.fromJson(json);
+    FirebaseFirestore.instance
+        .collection('patients')
+        .doc(user.uid.toString())
+        .set(demoLoginModel!.toMap())
+        .then((value) {
+      emit(PRegisterWithGoogleSuccessState());
+    }).catchError((onError) {
+      pint(onError.toString());
+      emit(PRegisterWithGoogleErrorState(onError.toString()));
+    });
+    return authResult;
+  }
+
 
   void getGalleryProfileImage() async {
     var pickedFile = await picker.pickImage(source: ImageSource.gallery);

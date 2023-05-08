@@ -132,9 +132,6 @@ class LoginScreen extends StatelessWidget {
                             text: 'Login',
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
-
-
-
                                 LoginCubit.get(context).userLogin(
                                   email: emailController.text
                                       .replaceAll(' ', '')

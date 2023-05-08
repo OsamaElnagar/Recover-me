@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recover_me/presentation/pages/home/patient/patient_prefs_screen.dart';
 import 'package:recover_me/presentation/widgets/neumorphism_button.dart';
 import 'package:recover_me/presentation/widgets/recover_text_button.dart';
 import 'package:recover_me/data/styles/colors.dart';
@@ -34,6 +35,7 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen> {
     countryController.text = '+20';
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -41,13 +43,15 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen> {
       child: BlocConsumer<PatientRegisterCubit, PRegisterStates>(
         listener: (context, state) {
           if (state is PRegisterCreateUserSuccessState) {
-            navigate2(
-                context,
-                LoginScreen(
-                  isPatient: true,
-                ));
+            navigate2(context, LoginScreen(isPatient: true));
             showToast(msg: 'Joined successfully', state: ToastStates.success);
           }
+
+          if (state is PRegisterWithGoogleSuccessState) {
+            navigate2(context, const PatientPrefsScreen());
+            showToast(msg: 'Joined successfully', state: ToastStates.success);
+          }
+
           if (state is PRegisterCreateUserErrorState) {
             showToast(msg: 'Invalid data', state: ToastStates.error);
           }
@@ -153,11 +157,16 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen> {
                             width: MediaQuery.of(context).size.width * .6,
                             text: 'Create account',
                             onPressed: () {
+                              if (phoneController.text[0] == '0') {
+                                phoneController.text = phoneController.text
+                                    .replaceFirst(RegExp(r'^.'), '');
+                              }
                               if (formKey.currentState!.validate()) {
                                 PatientRegisterCubit.get(context)
                                     .registerPatient(
                                   name: nameController.text,
-                                  phone: countryController.text+phoneController.text,
+                                  phone: countryController.text +
+                                      phoneController.text,
                                   email:
                                       emailController.text.replaceAll(' ', ''),
                                   password: passController.text,
@@ -181,7 +190,9 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen> {
                         // Sign up with google
                         Center(
                           child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              cubit.signInWithGoogle();
+                            },
                             child: Container(
                               padding: const EdgeInsets.all(5),
                               width: MediaQuery.of(context).size.width * .7,

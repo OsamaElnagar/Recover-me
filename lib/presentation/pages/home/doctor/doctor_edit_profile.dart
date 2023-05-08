@@ -254,6 +254,8 @@ class _DoctorEditProfileState extends State<DoctorEditProfile> {
                                     if (nameController.text != '' ||
                                         emailController.text != '' ||
                                         phoneController.text != '') {
+
+
                                       cubit.updateDoctorProfile(
                                         name: nameController.text != ''
                                             ? nameController.text

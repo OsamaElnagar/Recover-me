@@ -69,3 +69,15 @@ class PRegisterUpdateDisabilityErrorState extends PRegisterStates {
   PRegisterUpdateDisabilityErrorState(this.errorMessage);
 }
 class CompressImageState extends PRegisterStates {}
+
+////////////////////////////////////////////////////////////////
+class PRegisterWithGoogleLoadingState extends PRegisterStates {}
+
+
+class PRegisterWithGoogleSuccessState extends PRegisterStates {}
+
+class PRegisterWithGoogleErrorState extends PRegisterStates {
+  final String errorMessage;
+
+  PRegisterWithGoogleErrorState(this.errorMessage);
+}
