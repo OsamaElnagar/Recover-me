@@ -53,7 +53,7 @@ class RecoverTextFormField extends StatelessWidget {
         decoration: InputDecoration(
             // label: RecoverHints(hint: label!),
             focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: RecoverColors.recoverRed),
+              borderSide: BorderSide(color: RecoverColors.recoverWhite),
               borderRadius: BorderRadius.all(Radius.circular(15)),
             ),
             enabledBorder: const OutlineInputBorder(
@@ -62,8 +62,8 @@ class RecoverTextFormField extends StatelessWidget {
             ),
             hintText: hintText,
             hintStyle: GoogleFonts.montserrat(
-                color: RecoverColors.recoverGrey, fontWeight: FontWeight.w600),
-            focusColor: RecoverColors.recoverRed,
+                color: RecoverColors.recoverWhite, fontWeight: FontWeight.w600),
+            focusColor: RecoverColors.recoverWhite,
             contentPadding: const EdgeInsets.all(30)),
         validator: validator,
         onFieldSubmitted: onFieldSubmitted,
@@ -117,8 +117,13 @@ class RecoverPhoneFormField extends StatelessWidget {
             child: TextField(
               controller: countryController,
               keyboardType: TextInputType.number,
+              style: GoogleFonts.montserrat(
+                color: RecoverColors.recoverWhite,
+              ),
               decoration: const InputDecoration(
                 border: InputBorder.none,
+                hintStyle: TextStyle(color: RecoverColors.recoverWhite),
+
               ),
             ),
           ),
@@ -141,7 +146,7 @@ class RecoverPhoneFormField extends StatelessWidget {
               decoration: InputDecoration(
                   // label: RecoverHints(hint: label!),
                   focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: RecoverColors.recoverRed),
+                    borderSide: BorderSide(color: RecoverColors.recoverWhite),
                     borderRadius: BorderRadius.all(Radius.circular(15)),
                   ),
                   enabledBorder: const OutlineInputBorder(
@@ -150,8 +155,8 @@ class RecoverPhoneFormField extends StatelessWidget {
                   ),
                   hintText: hintText,
                   hintStyle: GoogleFonts.montserrat(
-                      color: RecoverColors.recoverGrey, fontWeight: FontWeight.w600),
-                  focusColor: RecoverColors.recoverRed,
+                      color: RecoverColors.recoverWhite, fontWeight: FontWeight.w600),
+                  focusColor: RecoverColors.recoverWhite,
                   contentPadding: const EdgeInsets.all(30)),
               validator: validator,
               onFieldSubmitted: onFieldSubmitted,
@@ -213,7 +218,7 @@ class RecoverPassFormField extends StatelessWidget {
         ),
         decoration: InputDecoration(
           focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: RecoverColors.recoverRed),
+            borderSide: BorderSide(color: RecoverColors.recoverWhite),
             borderRadius: BorderRadius.all(Radius.circular(15)),
           ),
           enabledBorder: const OutlineInputBorder(
@@ -221,7 +226,7 @@ class RecoverPassFormField extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(15)),
           ),
           hintText: hintText,
-          hintStyle: RecoverTextStyles.recoverHintMontserrat(fs: 17.0),
+          hintStyle: RecoverTextStyles.recoverHintMontserrat(fs: 17.0,color: RecoverColors.recoverWhite),
           contentPadding: const EdgeInsets.all(30),
           suffixIcon: IconButton(
             onPressed: loginCubit != null

@@ -1,15 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:palette_generator/palette_generator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:readmore/readmore.dart';
 import 'package:recover_me/presentation/components/components.dart';
 import 'package:recover_me/presentation/pages/home/patient/patient_edit_profile.dart';
-import 'package:recover_me/presentation/widgets/build_game_item.dart';
 import 'package:recover_me/data/models/game_model.dart';
 import 'package:recover_me/data/styles/paddings.dart';
 import 'package:recover_me/domain/bloc/recover/recover_cubit.dart';
+import 'package:recover_me/presentation/widgets/glassy.dart';
+import 'package:recover_me/presentation/widgets/my_background_designs.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../../../data/styles/colors.dart';
 import '../../../../../data/styles/fonts.dart';
@@ -45,7 +45,7 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
   @override
   void initState() {
     super.initState();
-    getPaletteColor();
+    //getPaletteColor();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       setState(() {
         startAnimation = true;
@@ -54,23 +54,23 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
   }
 
   PageController pageController = PageController();
-  PaletteGenerator? paletteGenerator;
-
-  void getPaletteColor({GameModel? gameModel}) async {
-    paletteGenerator = await PaletteGenerator.fromImageProvider(
-        gameModel != null
-            ? NetworkImage(gameModel.image)
-            : NetworkImage(RecoverCubit.get(context).games[0].image));
-    setState(() {});
-  }
-
-  Color paletteColor() {
-    return paletteGenerator != null
-        ? paletteGenerator!.dominantColor != null
-            ? paletteGenerator!.dominantColor!.color
-            : Colors.white
-        : Colors.white;
-  }
+  // PaletteGenerator? paletteGenerator;
+  //
+  // void getPaletteColor({GameModel? gameModel}) async {
+  //   paletteGenerator = await PaletteGenerator.fromImageProvider(
+  //       gameModel != null
+  //           ? NetworkImage(gameModel.image)
+  //           : NetworkImage(RecoverCubit.get(context).games[0].image));
+  //   setState(() {});
+  // }
+  //
+  // Color paletteColor() {
+  //   return paletteGenerator != null
+  //       ? paletteGenerator!.dominantColor != null
+  //           ? paletteGenerator!.dominantColor!.color
+  //           : Colors.white
+  //       : Colors.white;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +83,7 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
         var cubit = RecoverCubit.get(context);
         var patientLoginModel = cubit.patientLoginModel;
         return Scaffold(
-          backgroundColor: paletteColor(),
+         /// backgroundColor: paletteColor(),
           body: SafeArea(
             child: SmartRefresher(
               controller: refreshController,
@@ -95,140 +95,151 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
               ),
               onRefresh: () => getData(),
               child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: RecoverPaddings.recoverAuthPadding(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      const SizedBox(height: 5),
-                      RecoverHeadlines(
-                        headline: 'Recover sphere profile',
-                        color: RecoverColors.myColor,
-                        fs: 20,
-                      ),
-                      const SizedBox(height: 20),
-                      InkWell(
-                        onTap: () {
-
-                          navigateTo(context, const PatientEditProfile());
-                        },
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: RecoverColors.myColor,
-                              width: 2.0,
-                            ),
-                            borderRadius: BorderRadius.circular(10.0),
+                //physics: const BouncingScrollPhysics(),
+                child: typeBackground(
+                  asset: 'assets/images/rr.jpg',
+                  context: context,
+                  child: RecoverPaddings.recoverAuthPadding(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      //mainAxisSize: MainAxisSize.max,
+                      children: [
+                        const SizedBox(height: 5),
+                        glassyContainer(
+                          child: RecoverHeadlines(
+                            headline: 'Recover sphere profile',
+                            color: RecoverColors.recoverWhite,
+                            fs: 20,
                           ),
-                          child: Row(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  RecoverHeadlines(
-                                    headline: 'Patient:',
-                                    color: RecoverColors.myColor,
-                                    fs: 20,
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  RecoverNormalTexts(
-                                    norText: patientLoginModel!.name,
-                                    color: RecoverColors.myColor,
-                                    fs: 16.0,
-                                    maxLines: 1,
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  RecoverHints(
-                                    hint: patientLoginModel.disability ?? '',
-                                    color: RecoverColors.myColor,
-                                    fs: 15.0,
-                                    maxLines: 1,
-                                  ),
-                                ],
+                        ),
+                        const SizedBox(height: 20),
+                        InkWell(
+                          onTap: () {
+                            navigateTo(context, const PatientEditProfile());
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: RecoverColors.myColor,
+                                width: 2.0,
                               ),
-                              const Spacer(),
-                              CircleAvatar(
-                                radius: MediaQuery.of(context).size.width / 10,
-                                backgroundColor: Colors.white,
-                                backgroundImage: CachedNetworkImageProvider(
-                                  patientLoginModel.profileImage,
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Row(
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    RecoverHeadlines(
+                                      headline: 'Patient:',
+                                      color: RecoverColors.recoverWhite,
+                                      fs: 20,
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    RecoverNormalTexts(
+                                      norText: patientLoginModel!.name,
+                                      color: RecoverColors.recoverWhite,
+                                      fs: 16.0,
+                                      maxLines: 1,
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    RecoverHints(
+                                      hint: patientLoginModel.disability ?? '',
+                                      color: RecoverColors.recoverWhite,
+                                      fs: 15.0,
+                                      maxLines: 1,
+                                    ),
+                                  ],
                                 ),
-                                // child: CachedNetworkImage(
-                                //   imageUrl: dLModel.profileImage!,
-                                //   progressIndicatorBuilder:
-                                //       (context, url, progress) => Center(
-                                //     child: CircularProgressIndicator(
-                                //       value: progress.progress,
-                                //     ),
-                                //   ),
-                                //   fit: BoxFit.cover,
-                                // ),
-                              ),
-                            ],
+                                const Spacer(),
+                                CircleAvatar(
+                                  radius:
+                                      MediaQuery.of(context).size.width / 10,
+                                  backgroundColor: Colors.white,
+                                  backgroundImage: CachedNetworkImageProvider(
+                                    patientLoginModel.profileImage,
+                                  ),
+                                  // child: CachedNetworkImage(
+                                  //   imageUrl: dLModel.profileImage!,
+                                  //   progressIndicatorBuilder:
+                                  //       (context, url, progress) => Center(
+                                  //     child: CircularProgressIndicator(
+                                  //       value: progress.progress,
+                                  //     ),
+                                  //   ),
+                                  //   fit: BoxFit.cover,
+                                  // ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      RecoverHeadlines(
-                        headline: 'Recover sphere games',
-                        color: RecoverColors.myColor,
-                        fs: 20,
-                      ),
-                      const SizedBox(height: 20),
-                      Center(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(10),
+                        const SizedBox(height: 20),
+                        glassyContainer(
+                          child: RecoverHeadlines(
+                            headline: 'Recover sphere games',
+                            color: RecoverColors.myColor,
+                            fs: 20,
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15.0, vertical: 15.0),
-                            child: SmoothPageIndicator(
-                              controller: pageController,
-                              count: cubit.games.length,
-                              effect: const ExpandingDotsEffect(
-                                dotWidth: 16.0,
-                                dotHeight: 16.0,
-                                dotColor: Colors.grey,
-                                activeDotColor: RecoverColors.myColor,
-                                radius: 16.0,
-                                spacing: 6,
-                                expansionFactor: 4.0,
+                        ),
+                        const SizedBox(height: 20),
+                        Center(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              //color: Colors.grey,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 15.0, vertical: 15.0),
+                              child: SmoothPageIndicator(
+                                controller: pageController,
+                                count: cubit.games.length,
+                                effect: const ExpandingDotsEffect(
+                                  dotWidth: 16.0,
+                                  dotHeight: 16.0,
+                                  dotColor: Colors.grey,
+                                  activeDotColor: RecoverColors.myColor,
+                                  radius: 16.0,
+                                  spacing: 6,
+                                  expansionFactor: 4.0,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height,
-                        child: PageView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          controller: pageController,
-                          onPageChanged: (value) {
-                            setState(() {
-                              getPaletteColor(gameModel: cubit.games[value]);
-                            });
-                          },
-                          itemBuilder: (context, index) {
-                            return GameItemBuilder(
-                              gameModel: cubit.games[index],
-                            );
-                          },
-                          itemCount: cubit.games.length,
+                        const SizedBox(height: 20),
+                        Expanded(
+                          child : SizedBox(
+                            height: MediaQuery.of(context).size.height,
+                            child: PageView.builder(
+                              physics: const BouncingScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              controller: pageController,
+                              onPageChanged: (value) {
+                                setState(() {
+                                  // getPaletteColor(gameModel: cubit.games[value]);
+                                });
+                              },
+                              itemBuilder: (context, index) {
+                                return buildGameItem(
+                                  gameModel: cubit.games[index],
+                                );
+                              },
+                              itemCount: cubit.games.length,
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 0),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -243,32 +254,48 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
 Widget buildGameItem({required GameModel gameModel}) {
   return Column(
     children: [
-      ClipRRect(
-        borderRadius: BorderRadius.circular(10.0),
-        child: CachedNetworkImage(
-          width: double.infinity,
-          imageUrl: gameModel.image,
-          progressIndicatorBuilder: (context, url, progress) => Center(
-            child: CircularProgressIndicator(
-              value: progress.progress,
+      Card(
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(152),
+        ),
+        elevation: 20.0,
+        child: ClipRRect(
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          child: CircleAvatar(
+            radius: 152,
+            backgroundColor: RecoverColors.myColor,
+            child: CircleAvatar(
+              radius: 150,
+              backgroundImage: CachedNetworkImageProvider(gameModel.image),
             ),
           ),
-          fit: BoxFit.fitWidth,
         ),
       ),
       const SizedBox(
         height: 5,
       ),
-      RecoverNormalTexts(
-        norText: gameModel.name,
-        color: RecoverColors.recoverBlack,
+      glassyContainer(
+        child: RecoverNormalTexts(
+          norText: gameModel.name,
+          color: RecoverColors.recoverWhite,
+        ),
       ),
-      ReadMoreText(
-        gameModel.description,
-        moreStyle: RecoverTextStyles.recoverHintMontserrat(
-            color: RecoverColors.recoverBlack),
-        style: RecoverTextStyles.recoverHintMontserrat(
-          color: RecoverColors.myColor,
+      Expanded(
+        child : SizedBox(
+          height: 500,
+          child: SingleChildScrollView(
+            child : glassyContainer(
+              child: ReadMoreText(
+                gameModel.description,
+                moreStyle: RecoverTextStyles.recoverHintMontserrat(
+                    color: RecoverColors.recoverWhite),
+                style: RecoverTextStyles.recoverHintMontserrat(
+                  color: RecoverColors.recoverWhite,
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     ],

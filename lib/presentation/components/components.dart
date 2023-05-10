@@ -93,8 +93,10 @@ void dialogMessage({
   required List<Widget> actions,
 }) {
   showDialog<String>(
+    barrierColor: RecoverColors.recoverCelestialBlue.withOpacity(.4),
       context: context,
       builder: (BuildContext context) => AlertDialog(
+        backgroundColor: RecoverColors.myColor,
         title: title,
         content: content,
         actions: actions,

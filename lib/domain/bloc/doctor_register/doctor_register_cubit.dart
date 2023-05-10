@@ -36,7 +36,7 @@ class DoctorRegisterCubit extends Cubit<DRegisterStates> {
     'Innovation',
     'Student',
   ];
-  String? dropdownValue;
+  String? dropdownValue = 'Hand therapy';
 
   String? dropdownSelection(value) {
     dropdownValue = value;

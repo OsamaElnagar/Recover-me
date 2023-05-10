@@ -13,6 +13,8 @@ import 'package:recover_me/data/styles/paddings.dart';
 import 'package:recover_me/data/styles/texts.dart';
 import 'package:recover_me/domain/bloc/recover/recover_cubit.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:recover_me/presentation/widgets/glassy.dart';
+import 'package:recover_me/presentation/widgets/my_background_designs.dart';
 import '../../../../../data/models/game_model.dart';
 import '../../../../../data/styles/colors.dart';
 import '../../../widgets/my_loading.dart';
@@ -80,145 +82,155 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                     completeDuration: Duration.zero,
                   ),
                   onRefresh: () => getData(),
-                  child: RecoverPaddings.recoverAuthPadding(
-                    child: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 5),
-                          RecoverHeadlines(
-                            headline: 'Recover sphere profile',
-                            color: RecoverColors.myColor,
-                            fs: 20,
-                          ),
-                          const SizedBox(height: 20),
-                          InkWell(
-                            onTap: () {
-                              navigateTo(
-                                  context, const DoctorEditProfile());
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              padding: const EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: RecoverColors.myColor,
-                                  width: 2.0,
-                                ),
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              child: Row(
-                                children: [
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      RecoverHeadlines(
-                                        headline: 'Doctor:',
-                                        color: RecoverColors.myColor,
-                                        fs: 20,
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      RecoverNormalTexts(
-                                        norText: dLModel!.name!,
-                                        color: RecoverColors.myColor,
-                                        fs: 16.0,
-                                        maxLines: 1,
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      RecoverHints(
-                                        hint: dLModel.prof ?? '',
-                                        color: RecoverColors.myColor,
-                                        fs: 15.0,
-                                        maxLines: 1,
-                                      ),
-                                    ],
-                                  ),
-                                  const Spacer(),
-                                  CircleAvatar(
-                                    radius:
-                                        MediaQuery.of(context).size.width / 10,
-                                    backgroundColor: Colors.white,
-                                    backgroundImage: CachedNetworkImageProvider(
-                                      dLModel.profileImage!,
-                                    ),
-                                    // child: CachedNetworkImage(
-                                    //   imageUrl: dLModel.profileImage!,
-                                    //   progressIndicatorBuilder:
-                                    //       (context, url, progress) => Center(
-                                    //     child: CircularProgressIndicator(
-                                    //       value: progress.progress,
-                                    //     ),
-                                    //   ),
-                                    //   fit: BoxFit.cover,
-                                    // ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 50),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              RecoverHeadlines(
-                                headline: 'Patients on Recover Me sphere',
-                                color: RecoverColors.myColor,
+                  child: typeBackground(
+                    asset: 'assets/images/rr.jpg',
+                    context: context,
+                    child: RecoverPaddings.recoverAuthPadding(
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox(height: 5),
+                            glassyContainer(
+                              child: RecoverHeadlines(
+                                headline: 'Recover sphere profile',
+                                color: RecoverColors.recoverWhite,
                                 fs: 20,
                               ),
-                              const SizedBox(height: 20),
-                              ListView.separated(
-                                shrinkWrap: true,
-                                physics: const BouncingScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  return AnimatedContainer(
-                                    width: screenWidth,
-                                    curve: Curves.easeInOut,
-                                    duration: Duration(
-                                        milliseconds: 1000 + (index * 500)),
-                                    transform: Matrix4.translationValues(
-                                        startAnimation ? 0 : screenWidth, 0, 0),
-                                    child: BuildPatientItem(
-                                      patientLoginModel: cubit.patients[index],
-                                    ),
-                                  );
-                                },
-                                separatorBuilder: (context, index) {
-                                  return recoverDivider(
-                                    height: 10.0,
-                                  );
-                                },
-                                itemCount: cubit.patients.length,
-                              ),
-                            ],
-                          ),
-                          if (cubit.patients.length == 0)
-                            Center(
-                              child: SizedBox(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                            ),
+                            const SizedBox(height: 20),
+                            InkWell(
+                              onTap: () {
+                                navigateTo(context, const DoctorEditProfile());
+                              },
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: RecoverColors.myColor,
+                                    width: 2.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Row(
                                   children: [
-                                    const Icon(
-                                      Icons.hourglass_empty,
-                                      size: 150,
-                                      color: RecoverColors.myColor,
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        RecoverHeadlines(
+                                          headline: 'Doctor:',
+                                          color: RecoverColors.recoverWhite,
+                                          fs: 20,
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        RecoverNormalTexts(
+                                          norText: dLModel!.name!,
+                                          color: RecoverColors.recoverWhite,
+                                          fs: 16.0,
+                                          maxLines: 1,
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        RecoverHints(
+                                          hint: dLModel.prof ?? '',
+                                          color: RecoverColors.recoverWhite,
+                                          fs: 15.0,
+                                          maxLines: 1,
+                                        ),
+                                      ],
                                     ),
-                                    RecoverHints(
-                                      hint:
-                                          'It seems that no patients has registered yet!\n Try to invite some.',
-                                      color: RecoverColors.myColor,
+                                    const Spacer(),
+                                    CircleAvatar(
+                                      radius:
+                                          MediaQuery.of(context).size.width /
+                                              10,
+                                      backgroundColor: Colors.white,
+                                      backgroundImage:
+                                          CachedNetworkImageProvider(
+                                        dLModel.profileImage!,
+                                      ),
+                                      // child: CachedNetworkImage(
+                                      //   imageUrl: dLModel.profileImage!,
+                                      //   progressIndicatorBuilder:
+                                      //       (context, url, progress) => Center(
+                                      //     child: CircularProgressIndicator(
+                                      //       value: progress.progress,
+                                      //     ),
+                                      //   ),
+                                      //   fit: BoxFit.cover,
+                                      // ),
                                     ),
                                   ],
                                 ),
                               ),
                             ),
-                          const SizedBox(height: 20),
-                        ],
+                            const SizedBox(height: 50),
+                            glassyContainer(
+                              child: RecoverHeadlines(
+                                headline: 'Recover sphere patients',
+                                color: RecoverColors.recoverWhite,
+                                fs: 20,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            ListView.separated(
+                              shrinkWrap: true,
+                              physics: const BouncingScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return AnimatedContainer(
+                                  width: screenWidth,
+                                  curve: Curves.easeInOut,
+                                  duration: Duration(
+                                      milliseconds: 1000 + (index * 500)),
+                                  transform: Matrix4.translationValues(
+                                      startAnimation ? 0 : screenWidth,
+                                      0,
+                                      0),
+                                  child: BuildPatientItem(
+                                    patientLoginModel:
+                                    cubit.patients[index],
+                                  ),
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                return recoverDivider(
+                                  height: 10.0,
+                                );
+                              },
+                              itemCount: cubit.patients.length,
+                            ),
+                            if (cubit.patients.length == 0)
+                              Center(
+                                child: SizedBox(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        Icons.hourglass_empty,
+                                        size: 150,
+                                        color: RecoverColors.myColor,
+                                      ),
+                                      RecoverHints(
+                                        hint:
+                                            'It seems that no patients has registered yet!\n Try to invite some.',
+                                        color: RecoverColors.myColor,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            const SizedBox(height: 20),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -227,7 +239,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
             );
           },
           fallback: (context) {
-            return ErrorOccurred();
+            return const ErrorOccurred();
           },
         );
       },
@@ -276,13 +288,14 @@ class BuildPatientItem extends StatelessWidget {
           const SizedBox(width: 20),
           RecoverNormalTexts(
             norText: patientLoginModel.name,
-            color: RecoverColors.myColor,
+            color: RecoverColors.recoverWhite,
           ),
           const Spacer(),
           InkWell(
             onTapDown: getPosition,
             onTap: () {
               showMenu(
+                color: RecoverColors.myColor,
                 context: context,
                 position: relRectSize,
                 items: [
@@ -306,7 +319,7 @@ class BuildPatientItem extends StatelessWidget {
                           const SizedBox(
                             width: 5,
                           ),
-                          Text(games[0].name),
+                          RecoverHints(hint: games[0].name,color: Colors.white),
                         ],
                       ),
                     ),
@@ -334,7 +347,7 @@ class BuildPatientItem extends StatelessWidget {
                           const SizedBox(
                             width: 5,
                           ),
-                          Text(games[1].name),
+                          RecoverHints(hint: games[1].name,color: Colors.white,),
                         ],
                       ),
                     ),
@@ -362,7 +375,7 @@ class BuildPatientItem extends StatelessWidget {
                           const SizedBox(
                             width: 5,
                           ),
-                          Text(games[2].name),
+                          RecoverHints(hint: games[2].name,color: Colors.white),
                         ],
                       ),
                     ),
@@ -390,7 +403,7 @@ class BuildPatientItem extends StatelessWidget {
                           const SizedBox(
                             width: 5,
                           ),
-                          Text(games[3].name),
+                          RecoverHints(hint: games[3].name,color: Colors.white),
                         ],
                       ),
                     ),
@@ -405,7 +418,8 @@ class BuildPatientItem extends StatelessWidget {
               padding: EdgeInsets.all(8.0),
               child: Icon(
                 Icons.arrow_drop_down_circle_rounded,
-                color: RecoverColors.myColor,
+                color: RecoverColors.recoverWhite,
+                size: 30,
               ),
             ),
           ),
