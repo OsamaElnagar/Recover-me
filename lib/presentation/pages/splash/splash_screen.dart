@@ -5,9 +5,7 @@ import 'package:recover_me/presentation/widgets/animated_text.dart';
 import 'package:recover_me/domain/bloc/recover/recover_cubit.dart';
 import '../../../../data/styles/colors.dart';
 import '../../components/components.dart';
-
-
-
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 class AppSplashScreen extends StatefulWidget {
   const AppSplashScreen({Key? key, required this.stWidget}) : super(key: key);
   final Widget stWidget;
@@ -21,11 +19,19 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
   bool loadingDoctorData = false;
 
   void startSplash() {
-    Timer(const Duration(seconds: 8), () {
+    Timer(const Duration(seconds: 5), () {
       navigate2(context, widget.stWidget);
     });
   }
-
+  final spinKit = SpinKitFadingCircle(
+    itemBuilder: (BuildContext context, int index) {
+      return DecoratedBox(
+        decoration: BoxDecoration(
+          color: index.isEven ? Colors.red : Colors.green,
+        ),
+      );
+    },
+  );
   @override
   void initState() {
     startSplash();
@@ -47,12 +53,10 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
+                children:  [
                   const AnimatedText(),
                   const SizedBox(height: 20),
-                  if (loadingDoctorData == true)
-                    const CircularProgressIndicator(
-                        color: RecoverColors.myColor),
+                  spinKit,
                 ],
               ),
             ),

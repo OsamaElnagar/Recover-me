@@ -47,6 +47,7 @@ class CompressImageState extends UpdateProfileStates {}
 
 
 class UpdateSignOutLoadingState extends UpdateProfileStates {}
+class UpdateUseDefaultState extends UpdateProfileStates {}
 
 
 class UpdateSignOutSuccessState extends UpdateProfileStates {}

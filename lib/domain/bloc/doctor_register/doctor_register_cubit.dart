@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
@@ -64,13 +64,13 @@ class DoctorRegisterCubit extends Cubit<DRegisterStates> {
     )
         .then((value) async {
           uId = value.user!.uid;
-      var receiverFCMToken = await FirebaseMessaging.instance.getToken();
+     // var receiverFCMToken = await FirebaseMessaging.instance.getToken();
       createUserInFireStore(
         name: name,
         phone: phone,
         email: email,
         uId: value.user!.uid,
-        receiverFCMToken: receiverFCMToken,
+        receiverFCMToken: 'receiverFCMToken',
       );
     }).catchError((onError) {
       pint(onError.toString());
@@ -135,9 +135,7 @@ class DoctorRegisterCubit extends Cubit<DRegisterStates> {
         bio: 'Write your bio',
         uId: uId!,
         receiverFCMToken: receiverFCMToken!,
-        profileImage:
-            'https://firebasestorage.googleapis.com/v0/b/recoverme-a017c.appspot.com/o/'
-            'app%20assets%2Fdoctor_avatar.jpg?alt=media&token=6d50122e-f459-4e85-adad-7d734fe2f3e8',
+        profileImage:defaultDocPhoto,
         profileCover:
             'https://firebasestorage.googleapis.com/v0/b/social-app-201c9.appspot.com/o/'
             'newUserCoverImage.png?alt=media&token=4f00e83a-629b-4b27-abb5-73a1ec54d4ab');

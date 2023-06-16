@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recover_me/data/styles/colors.dart';
 import 'package:recover_me/presentation/pages/home/user_type.dart';
 import 'package:recover_me/presentation/pages/home/doctor/doctor_home_screen.dart';
 import 'package:recover_me/presentation/pages/home/patient/patient_home_screen.dart';
@@ -45,6 +47,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: RecoverColors.myColor,
+      ),
+    );
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -52,7 +60,9 @@ class MyApp extends StatelessWidget {
             return RecoverCubit(RecoverInitial())
               ..getDoctorData()
               ..getPatientData()
-              ..getPatients()..getGames();
+              ..getPatients()
+              ..getGames()
+            ..getDoctors();
           },
         ),
         // BlocProvider(
@@ -67,7 +77,9 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
           primarySwatch: Colors.blue,
         ),
-        home:  AppSplashScreen(stWidget: stWidget),
+        home: AppSplashScreen(
+          stWidget: stWidget,
+        ),
       ),
     );
   }

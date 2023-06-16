@@ -60,10 +60,11 @@ class _PatientEditProfileState extends State<PatientEditProfile> {
         },
         builder: (context, state) {
           var cubit = UpdateProfileCubit.get(context);
+          var bigCubit = RecoverCubit.get(context);
           return Scaffold(
             body: SafeArea(
               child: SingleChildScrollView(
-               // physics: const BouncingScrollPhysics(),
+                // physics: const BouncingScrollPhysics(),
                 child: typeBackground(
                   asset: 'assets/images/type_background.jpg',
                   context: context,
@@ -86,7 +87,7 @@ class _PatientEditProfileState extends State<PatientEditProfile> {
                             height: 20,
                           ),
                           glassyContainer(
-                            child : RecoverHeadlines(
+                            child: RecoverHeadlines(
                               headline: 'Update your account',
                               color: RecoverColors.recoverWhite,
                             ),
@@ -137,85 +138,31 @@ class _PatientEditProfileState extends State<PatientEditProfile> {
                                           ),
                                           InkWell(
                                             onTap: () {
-                                              showModalBottomSheet(
+                                              buildShowModalBottomSheet(
                                                 context: context,
-                                                builder: (context) => SizedBox(
-                                                  height: 70,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      InkWell(
-                                                        onTap: () {
-                                                          cubit
-                                                              .getGalleryProfileImage();
-                                                        },
-                                                        child: Column(
-                                                          children: [
-                                                            RecoverNormalTexts(
-                                                                norText:
-                                                                    'Gallery',
-                                                                color:
-                                                                    RecoverColors
-                                                                        .myColor),
-                                                            const SizedBox(
-                                                              height: 5.0,
-                                                            ),
-                                                            const Icon(
-                                                              Icons
-                                                                  .browse_gallery,
-                                                              color:
-                                                                  Colors.yellow,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(5),
-                                                        margin: const EdgeInsets
-                                                            .all(15),
-                                                        width: 3,
-                                                        height: 50,
-                                                        color: RecoverColors
-                                                            .myColor,
-                                                      ),
-                                                      InkWell(
-                                                        onTap: () {
-                                                          cubit
-                                                              .getCameraProfileImage();
-                                                        },
-                                                        child: Column(
-                                                          children: [
-                                                            RecoverNormalTexts(
-                                                                norText:
-                                                                    'Camera',
-                                                                color:
-                                                                    RecoverColors
-                                                                        .myColor),
-                                                            const SizedBox(
-                                                              height: 5.0,
-                                                            ),
-                                                            const Icon(
-                                                              Icons.camera_alt,
-                                                              color:
-                                                                  Colors.blue,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
+                                                onGalleryTap: () {
+                                                  cubit
+                                                      .getGalleryProfileImage();
+                                                  Navigator.pop(context);
+                                                },
+                                                onCameraTap: () {
+                                                  cubit.getCameraProfileImage();
+                                                  Navigator.pop(context);
+                                                },
+                                                onDefaultTap: () {
+                                                  bigCubit.useDefault(collection: 'patients');
+                                                  Navigator.pop(context);
+                                                },
+                                                onDisplayTap: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                image: cubit.patientLoginModel!
+                                                    .profileImage,
                                               );
                                             },
                                             child: Icon(
                                               Icons.camera_alt,
+                                              size: 30,
                                               color:
                                                   Colors.black.withOpacity(.6),
                                             ),
@@ -321,12 +268,21 @@ class _PatientEditProfileState extends State<PatientEditProfile> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              navigateTo(context, const PatientPrefsScreen());
+                              navigateTo(
+                                  context,
+                                  PatientPrefsScreen(
+                                    oldUser: true,
+                                    patLoginModel: cubit.patientLoginModel,
+                                  ));
                             },
-                            child: RecoverNormalTexts(
-                              norText: 'I want to see my training!',
-                              fs: 18.0,
-                              color: RecoverColors.recoverWhite,
+                            child: const Text(
+                              'I want to see my training!',
+                              style: TextStyle(
+                                color: RecoverColors.recoverWhite,
+                                fontSize: 18.0,
+                                decoration: TextDecoration.underline,
+                                decorationThickness: 2.0,
+                              ),
                             ),
                           ),
                           const SizedBox(

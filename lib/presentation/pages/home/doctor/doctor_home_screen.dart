@@ -1,5 +1,4 @@
 // ignore_for_file: must_be_immutable
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,6 +17,7 @@ import 'package:recover_me/presentation/widgets/my_background_designs.dart';
 import '../../../../../data/models/game_model.dart';
 import '../../../../../data/styles/colors.dart';
 import '../../../widgets/my_loading.dart';
+
 
 class DoctorHomeScreen extends StatefulWidget {
   const DoctorHomeScreen({Key? key}) : super(key: key);
@@ -82,12 +82,12 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                     completeDuration: Duration.zero,
                   ),
                   onRefresh: () => getData(),
-                  child: typeBackground(
-                    asset: 'assets/images/rr.jpg',
-                    context: context,
-                    child: RecoverPaddings.recoverAuthPadding(
-                      child: SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(),
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: typeBackground(
+                      asset: 'assets/images/blue_gradient.jpg',
+                      context: context,
+                      child: RecoverPaddings.recoverAuthPadding(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -180,31 +180,30 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                               ),
                             ),
                             const SizedBox(height: 20),
-                            ListView.separated(
-                              shrinkWrap: true,
-                              physics: const BouncingScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                return AnimatedContainer(
-                                  width: screenWidth,
-                                  curve: Curves.easeInOut,
-                                  duration: Duration(
-                                      milliseconds: 1000 + (index * 500)),
-                                  transform: Matrix4.translationValues(
-                                      startAnimation ? 0 : screenWidth,
-                                      0,
-                                      0),
-                                  child: BuildPatientItem(
-                                    patientLoginModel:
-                                    cubit.patients[index],
-                                  ),
-                                );
-                              },
-                              separatorBuilder: (context, index) {
-                                return recoverDivider(
-                                  height: 10.0,
-                                );
-                              },
-                              itemCount: cubit.patients.length,
+                            Expanded(
+                              child : ListView.separated(
+                                shrinkWrap: true,
+                                physics: const BouncingScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  return AnimatedContainer(
+                                    width: screenWidth,
+                                    curve: Curves.easeInOut,
+                                    duration: Duration(
+                                        milliseconds: 1000 + (index * 500)),
+                                    transform: Matrix4.translationValues(
+                                        startAnimation ? 0 : screenWidth, 0, 0),
+                                    child: BuildPatientItem(
+                                      patientLoginModel: cubit.patients[index],
+                                    ),
+                                  );
+                                },
+                                separatorBuilder: (context, index) {
+                                  return recoverDivider(
+                                    height: 10.0,
+                                  );
+                                },
+                                itemCount: cubit.patients.length,
+                              ),
                             ),
                             if (cubit.patients.length == 0)
                               Center(
@@ -228,7 +227,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                                   ),
                                 ),
                               ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 0),
                           ],
                         ),
                       ),
@@ -319,7 +318,8 @@ class BuildPatientItem extends StatelessWidget {
                           const SizedBox(
                             width: 5,
                           ),
-                          RecoverHints(hint: games[0].name,color: Colors.white),
+                          RecoverHints(
+                              hint: games[0].name, color: Colors.white),
                         ],
                       ),
                     ),
@@ -347,7 +347,10 @@ class BuildPatientItem extends StatelessWidget {
                           const SizedBox(
                             width: 5,
                           ),
-                          RecoverHints(hint: games[1].name,color: Colors.white,),
+                          RecoverHints(
+                            hint: games[1].name,
+                            color: Colors.white,
+                          ),
                         ],
                       ),
                     ),
@@ -375,7 +378,8 @@ class BuildPatientItem extends StatelessWidget {
                           const SizedBox(
                             width: 5,
                           ),
-                          RecoverHints(hint: games[2].name,color: Colors.white),
+                          RecoverHints(
+                              hint: games[2].name, color: Colors.white),
                         ],
                       ),
                     ),
@@ -403,7 +407,8 @@ class BuildPatientItem extends StatelessWidget {
                           const SizedBox(
                             width: 5,
                           ),
-                          RecoverHints(hint: games[3].name,color: Colors.white),
+                          RecoverHints(
+                              hint: games[3].name, color: Colors.white),
                         ],
                       ),
                     ),

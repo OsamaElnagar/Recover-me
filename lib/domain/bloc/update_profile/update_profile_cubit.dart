@@ -62,11 +62,9 @@ class UpdateProfileCubit extends Cubit<UpdateProfileStates> {
       FirebaseAuth.instance.currentUser!.delete();
       navigate2(context, const UserType());
       emit(DeleteAccountSuccessState());
-    })
-        .catchError((e) {
+    }).catchError((e) {
       pint(e.toString());
     });
-
   }
 
   void deleteDoctorAccount(context) {

@@ -1,9 +1,13 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recover_me/data/styles/colors.dart';
 
-
+import '../../data/styles/texts.dart';
+import '../pages/home/patient/patient_home_screen.dart';
+import '../widgets/outlined_container.dart';
 
 void navigateTo(context, widget) => Navigator.push(
       context,
@@ -19,7 +23,6 @@ Future navigate2(context, widget) => Navigator.pushAndRemoveUntil(
       ),
       (route) => false,
     );
-
 
 Widget recoverButton({required String string, required Function() onPressed}) {
   return Container(
@@ -41,6 +44,7 @@ Widget recoverButton({required String string, required Function() onPressed}) {
     ),
   );
 }
+
 void showToast({
   required String msg,
   required ToastStates state,
@@ -80,8 +84,6 @@ void printFulltext(String text) {
   });
 }
 
-
-
 void pint(String text) {
   debugPrint(text);
 }
@@ -91,16 +93,234 @@ void dialogMessage({
   required Widget title,
   required Widget content,
   required List<Widget> actions,
+  Color? barrierColor,
 }) {
   showDialog<String>(
-    barrierColor: RecoverColors.recoverCelestialBlue.withOpacity(.4),
+      barrierColor:barrierColor?? RecoverColors.recoverCelestialBlue.withOpacity(.4),
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        backgroundColor: RecoverColors.myColor,
-        title: title,
-        content: content,
-        actions: actions,
-      ));
+            backgroundColor: RecoverColors.myColor,
+            title: title,
+            content: content,
+            actions: actions,
+          ));
 }
 
+Future<dynamic> buildShowModalBottomSheet({
+  required BuildContext context,
+  required void Function()? onGalleryTap,
+  required void Function()? onCameraTap,
+  required void Function()? onDefaultTap,
+  required void Function()? onDisplayTap,
+  String? image,
+}) {
+  return showModalBottomSheet(
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(50),
+      ),
+    ),
+    builder: (context) => MyBottomSheet(
+      onGalleryTap: onGalleryTap,
+      onDisplayTap: onDisplayTap,
+      onDefaultTap: onDefaultTap,
+      onCameraTap: onCameraTap,
+      image: image,
+    ),
+  );
+}
 
+class MyBottomSheet extends StatefulWidget {
+  void Function()? onGalleryTap;
+  void Function()? onCameraTap;
+  void Function()? onDefaultTap;
+  void Function()? onDisplayTap;
+  String? image;
+
+  MyBottomSheet({
+    super.key,
+    this.onGalleryTap,
+    this.onCameraTap,
+    this.onDefaultTap,
+    this.onDisplayTap,
+    this.image,
+  });
+
+  @override
+  State<MyBottomSheet> createState() => _MyBottomSheetState();
+}
+
+class _MyBottomSheetState extends State<MyBottomSheet> {
+  bool isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: const BorderRadius.only(
+        topRight: Radius.circular(50.0),
+        topLeft: Radius.circular(50.0),
+      ),
+      child: Container(
+        decoration: const BoxDecoration(
+          color: RecoverColors.myColor,
+        ),
+        height: isExpanded
+            ? MediaQuery.of(context).size.height
+            : MediaQuery.of(context).size.height * 0.4,
+        child: Stack(
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 10),
+                Container(
+                  padding: const EdgeInsets.all(5),
+                  margin: const EdgeInsets.all(15),
+                  width: 50,
+                  height: 2,
+                  color: Colors.white54,
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InkWell(
+                      onTap: widget.onGalleryTap,
+                      child: myContainer(
+                        color: Colors.white,
+                        child: Column(
+                          children: [
+                            RecoverNormalTexts(
+                                norText: 'Gallery', color: Colors.white),
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                            const Icon(
+                              Icons.browse_gallery,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: widget.onCameraTap,
+                      child: myContainer(
+                        color: Colors.white,
+                        child: Column(
+                          children: [
+                            RecoverNormalTexts(
+                                norText: 'Camera', color: Colors.white),
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                            const Icon(
+                              Icons.camera_alt,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InkWell(
+                      onTap: widget.onDefaultTap,
+                      child: myContainer(
+                        color: Colors.white,
+                        child: Column(
+                          children: [
+                            RecoverNormalTexts(
+                                norText: 'Use\nDefault!', color: Colors.white),
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                            const Icon(
+                              Icons.person,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        // widget.onDisplayTap
+                        setState(() {
+                          isExpanded = true;
+                        });
+                      },
+                      child: myContainer(
+                        color: Colors.white,
+                        child: Column(
+                          children: [
+                            RecoverNormalTexts(
+                                norText: 'Display\nPhoto!',
+                                color: Colors.white),
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                            const Icon(
+                              Icons.smart_display,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const Expanded(
+                  child: SizedBox(
+                    height: 20,
+                  ),
+                ),
+              ],
+            ),
+            if (isExpanded)
+              Image(
+                image: NetworkImage(widget.image!),
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  }
+                  return Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(.6),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                        color: Colors.white54,
+                      ),
+                    ),
+                  );
+                },
+                errorBuilder: (BuildContext context, Object exception,
+                    StackTrace? stackTrace) {
+                  return const Icon(Icons.error);
+                },
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}

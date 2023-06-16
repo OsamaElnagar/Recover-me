@@ -30,3 +30,5 @@ class LoginResetPasswordErrorState extends LoginStates {
 
   LoginResetPasswordErrorState(this.error);
 }
+
+class LoginGetDataSuccessState extends LoginStates {}

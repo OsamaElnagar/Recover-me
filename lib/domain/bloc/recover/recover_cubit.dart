@@ -41,6 +41,7 @@ class RecoverCubit extends Cubit<RecoverState> {
   DoctorLoginModel? doctorLoginModel;
   PatientLoginModel? patientLoginModel;
   List<PatientLoginModel> patients = [];
+  List<DoctorLoginModel> doctors = [];
   List<GameModel> games = [];
 
   void endBoarding(context) {
@@ -101,6 +102,20 @@ class RecoverCubit extends Cubit<RecoverState> {
     });
   }
 
+  void getDoctors() {
+    emit(RecoverGetDoctorsLoadingState());
+    doctors.clear();
+    FirebaseFirestore.instance.collection('doctors').get().then((value) {
+      for (var doctor in value.docs) {
+        doctors.add(DoctorLoginModel.fromJson(doctor.data()));
+      }
+      emit(RecoverGetDoctorsSuccessState());
+    }).catchError((onError) {
+      pint(onError.toString());
+      emit(RecoverGetDoctorsErrorState(onError.toString()));
+    });
+  }
+
   void getPatientData() {
     emit(RecoverGetPatientDataLoadingState());
     FirebaseFirestore.instance
@@ -114,6 +129,17 @@ class RecoverCubit extends Cubit<RecoverState> {
     }).catchError((onError) {
       pint(onError.toString());
       emit(RecoverGetPatientDataErrorState(onError.toString()));
+    });
+  }
+
+  void useDefault({required String collection}) {
+    FirebaseFirestore.instance.collection(collection).doc(uId).update({
+      'profileImage':
+      collection == 'patients' ? defaultPatPhoto : defaultDocPhoto
+    }).then((value) {
+      emit(UpdateUseDefaultState());
+    }).catchError((e){
+      pint(e.toString());
     });
   }
 }

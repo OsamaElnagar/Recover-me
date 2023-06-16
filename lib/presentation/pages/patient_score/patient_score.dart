@@ -10,6 +10,7 @@ import '../../../../data/models/score_model.dart';
 import '../../../../data/styles/colors.dart';
 import 'package:recover_me/presentation/manager/dateTime_manager.dart'
     as date_util;
+import 'package:flutter_svg/flutter_svg.dart';
 
 class PatientScore extends StatefulWidget {
   const PatientScore({Key? key, required this.patientLoginModel})
@@ -34,7 +35,7 @@ class _PatientScoreState extends State<PatientScore> {
   TextEditingController controller = TextEditingController();
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final scrollKey = GlobalKey();
-
+  final double _dayItemWidth = 60.0;
   int taskIndex = 0;
 
   @override
@@ -42,8 +43,13 @@ class _PatientScoreState extends State<PatientScore> {
     currentMonthList = date_util.DateUtils.daysInMonth(currentDateTime);
     currentMonthList.sort((a, b) => a.day.compareTo(b.day));
     currentMonthList = currentMonthList.toSet().toList();
-    horizontalScrollController =
-        ScrollController(initialScrollOffset: 70.0 * currentDateTime.day);
+    horizontalScrollController = ScrollController();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      // Scroll to the current day's position
+      final currentDayPosition = (currentDateTime.day - 1) * _dayItemWidth;
+      horizontalScrollController.jumpTo(currentDayPosition);
+    });
+
     super.initState();
   }
 
@@ -83,12 +89,12 @@ class _PatientScoreState extends State<PatientScore> {
               });
             },
             child: Container(
-              width: 60,
+              width: _dayItemWidth,
               height: 70,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: (currentMonthList[index].day == currentDateTime.day)
-                    ?RecoverColors.myColor
+                    ? RecoverColors.myColor
                     : Colors.white,
                 border: Border.all(
                   color: RecoverColors.myColor,
@@ -168,6 +174,7 @@ class _PatientScoreState extends State<PatientScore> {
                 RecoverNormalTexts(
                   norText: widget.patientLoginModel.name,
                   color: RecoverColors.recoverWhite,
+                  fs: 14.0,
                 ),
                 const Icon(
                   Icons.verified_rounded,
@@ -178,15 +185,15 @@ class _PatientScoreState extends State<PatientScore> {
             ),
             actions: [
               Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 14.0),
-                  child: InkWell(
-                    onTap: () async {
-                      //openWhatsAppChat(phoneNumber: '+201033275832');
-                      await launch(
-                          'https://wa.me/${widget.patientLoginModel.phone}');
-                    },
-                    child: const CircleAvatar(child: Text('Chat')),
+                child: InkWell(
+                  onTap: () async {
+                    //openWhatsAppChat(phoneNumber: '+201033275832');
+                    await launch(
+                        'https://wa.me/${widget.patientLoginModel.phone}');
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 14.0),
+                    child: SizedBox(width: 40, child: SvgPicture.asset('assets/images/whatsapp.svg')),
                   ),
                 ),
               ),

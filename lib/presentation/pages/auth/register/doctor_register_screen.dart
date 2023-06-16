@@ -54,7 +54,7 @@ class _DoctorRegisterScreenState extends State<DoctorRegisterScreen> {
           }
 
           if (state is DRegisterWithGoogleSuccessState) {
-            navigate2(context, const DocProfAndImage());
+            navigate2(context,  DocProfAndImage());
             showToast(msg: 'Joined successfully', state: ToastStates.success);
           }
 
@@ -202,7 +202,7 @@ class _DoctorRegisterScreenState extends State<DoctorRegisterScreen> {
                           Center(
                             child: GestureDetector(
                               onTap: () {
-                                cubit.signInWithGoogle();
+                                //cubit.signInWithGoogle();
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(5),

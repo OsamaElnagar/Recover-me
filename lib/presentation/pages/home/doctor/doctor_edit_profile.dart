@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,6 +62,7 @@ class _DoctorEditProfileState extends State<DoctorEditProfile> {
         },
         builder: (context, state) {
           var cubit = UpdateProfileCubit.get(context);
+          var bigCubit = RecoverCubit.get(context);
           return Scaffold(
             body: SafeArea(
               child: SingleChildScrollView(
@@ -86,7 +88,7 @@ class _DoctorEditProfileState extends State<DoctorEditProfile> {
                             height: 20,
                           ),
                           glassyContainer(
-                            child : RecoverHeadlines(
+                            child: RecoverHeadlines(
                               headline: 'Update your account',
                               color: RecoverColors.recoverWhite,
                             ),
@@ -126,96 +128,42 @@ class _DoctorEditProfileState extends State<DoctorEditProfile> {
                                         children: [
                                           CircleAvatar(
                                             radius: 35,
-                                            backgroundImage:
-                                                cubit.profileImageFile != null
-                                                    ? FileImage(
-                                                        cubit.profileImageFile!)
-                                                    : NetworkImage(cubit
-                                                            .doctorLoginModel!
+                                            backgroundImage: cubit
+                                                        .profileImageFile !=
+                                                    null
+                                                ? FileImage(
+                                                    cubit.profileImageFile!)
+                                                : CachedNetworkImageProvider(
+                                                        cubit.doctorLoginModel!
                                                             .profileImage!)
-                                                        as ImageProvider,
+                                                    as ImageProvider,
                                           ),
                                           InkWell(
                                             onTap: () {
-                                              showModalBottomSheet(
+                                              buildShowModalBottomSheet(
                                                 context: context,
-                                                builder: (context) => SizedBox(
-                                                  height: 70,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      InkWell(
-                                                        onTap: () {
-                                                          cubit
-                                                              .getGalleryProfileImage();
-                                                        },
-                                                        child: Column(
-                                                          children: [
-                                                            RecoverNormalTexts(
-                                                                norText:
-                                                                    'Gallery',
-                                                                color:
-                                                                    RecoverColors
-                                                                        .myColor),
-                                                            const SizedBox(
-                                                              height: 5.0,
-                                                            ),
-                                                            const Icon(
-                                                              Icons
-                                                                  .browse_gallery,
-                                                              color:
-                                                                  Colors.yellow,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(5),
-                                                        margin: const EdgeInsets
-                                                            .all(15),
-                                                        width: 3,
-                                                        height: 50,
-                                                        color: RecoverColors
-                                                            .myColor,
-                                                      ),
-                                                      InkWell(
-                                                        onTap: () {
-                                                          cubit
-                                                              .getCameraProfileImage();
-                                                        },
-                                                        child: Column(
-                                                          children: [
-                                                            RecoverNormalTexts(
-                                                                norText:
-                                                                    'Camera',
-                                                                color:
-                                                                    RecoverColors
-                                                                        .myColor),
-                                                            const SizedBox(
-                                                              height: 5.0,
-                                                            ),
-                                                            const Icon(
-                                                              Icons.camera_alt,
-                                                              color:
-                                                                  Colors.blue,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
+                                                onGalleryTap: () {
+                                                  cubit
+                                                      .getGalleryProfileImage();
+                                                  Navigator.pop(context);
+                                                },
+                                                onCameraTap: () {
+                                                  cubit.getCameraProfileImage();
+                                                  Navigator.pop(context);
+                                                },
+                                                onDefaultTap: () {
+                                                  bigCubit.useDefault(
+                                                      collection: 'doctors');
+                                                  Navigator.pop(context);
+                                                },
+                                                onDisplayTap: () {},
+                                                image: cubit.doctorLoginModel!
+                                                    .profileImage!,
                                               );
                                             },
                                             child: Icon(
                                               Icons.camera_alt,
+                                              size: 30,
                                               color:
                                                   Colors.black.withOpacity(.6),
                                             ),
@@ -322,17 +270,24 @@ class _DoctorEditProfileState extends State<DoctorEditProfile> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              navigateTo(context, const DocProfAndImage());
+                              navigateTo(
+                                  context,
+                                  DocProfAndImage(
+                                    oldUser: true,
+                                    docLoginModel: cubit.doctorLoginModel,
+                                  ));
                             },
-                            child: RecoverHints(
-                              hint: 'I want to see my training!',
-                              fs: 18.0,
-                              color: RecoverColors.recoverWhite,
+                            child: const Text(
+                              'I want to see my training!',
+                              style: TextStyle(
+                                color: RecoverColors.recoverWhite,
+                                fontSize: 18.0,
+                                decoration: TextDecoration.underline,
+                                decorationThickness: 2.0,
+                              ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 20,
-                          ),
+                          const SizedBox(height: 20),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [

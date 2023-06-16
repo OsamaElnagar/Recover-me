@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recover_me/data/models/patient_login_model.dart';
+import 'package:recover_me/domain/bloc/recover/recover_cubit.dart';
 import 'package:recover_me/presentation/components/components.dart';
 import 'package:recover_me/presentation/widgets/glassy.dart';
 import 'package:recover_me/presentation/widgets/my_background_designs.dart';
@@ -12,7 +14,10 @@ import '../../../../../domain/bloc/patient_register/patient_register_cubit.dart'
 import 'patient_home_screen.dart';
 
 class PatientPrefsScreen extends StatefulWidget {
-  const PatientPrefsScreen({Key? key}) : super(key: key);
+  PatientPrefsScreen({Key? key, this.oldUser, this.patLoginModel})
+      : super(key: key);
+  bool? oldUser;
+  PatientLoginModel? patLoginModel;
 
   @override
   State<PatientPrefsScreen> createState() => _PatientPrefsScreenState();
@@ -33,6 +38,7 @@ class _PatientPrefsScreenState extends State<PatientPrefsScreen> {
         },
         builder: (context, state) {
           var cubit = PatientRegisterCubit.get(context);
+          var bigCubit = RecoverCubit.get(context);
 
           return Scaffold(
             body: SafeArea(
@@ -74,66 +80,24 @@ class _PatientPrefsScreenState extends State<PatientPrefsScreen> {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  showModalBottomSheet(
+                                  buildShowModalBottomSheet(
                                     context: context,
-                                    builder: (context) => SizedBox(
-                                      height: 70,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              cubit.getGalleryProfileImage();
-                                            },
-                                            child: Column(
-                                              children: [
-                                                RecoverNormalTexts(
-                                                    norText: 'Gallery',
-                                                    color:
-                                                        RecoverColors.myColor),
-                                                const SizedBox(
-                                                  height: 5.0,
-                                                ),
-                                                const Icon(
-                                                  Icons.browse_gallery,
-                                                  color: Colors.yellow,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Container(
-                                            padding: const EdgeInsets.all(5),
-                                            margin: const EdgeInsets.all(15),
-                                            width: 3,
-                                            height: 50,
-                                            color: RecoverColors.myColor,
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              cubit.getCameraProfileImage();
-                                            },
-                                            child: Column(
-                                              children: [
-                                                RecoverNormalTexts(
-                                                    norText: 'Camera',
-                                                    color:
-                                                        RecoverColors.myColor),
-                                                const SizedBox(
-                                                  height: 5.0,
-                                                ),
-                                                const Icon(
-                                                  Icons.camera_alt,
-                                                  color: Colors.blue,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                                    onGalleryTap: () {
+                                      cubit.getGalleryProfileImage();
+                                      Navigator.pop(context);
+                                    },
+                                    onCameraTap: () {
+                                      cubit.getCameraProfileImage();
+                                      Navigator.pop(context);
+                                    },
+                                    onDefaultTap: () {
+                                      bigCubit.useDefault(collection:'patients');
+                                      Navigator.pop(context);
+                                    },
+                                    onDisplayTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    image: widget.patLoginModel!.profileImage,
                                   );
                                 },
                                 child: RecoverNormalTexts(
@@ -148,9 +112,12 @@ class _PatientPrefsScreenState extends State<PatientPrefsScreen> {
                                 backgroundColor: RecoverColors.myColor,
                                 child: CircleAvatar(
                                   radius: 45,
-                                  backgroundImage:
-                                      cubit.profileImageFile != null
-                                          ? FileImage(cubit.profileImageFile!)
+                                  backgroundImage: cubit.profileImageFile !=
+                                          null
+                                      ? FileImage(cubit.profileImageFile!)
+                                      : widget.patLoginModel != null
+                                          ? NetworkImage(widget
+                                              .patLoginModel!.profileImage)
                                           : const AssetImage(
                                                   'assets/images/patient.jpg')
                                               as ImageProvider,
@@ -187,7 +154,8 @@ class _PatientPrefsScreenState extends State<PatientPrefsScreen> {
                                 icon: const SizedBox(),
                                 underline: const SizedBox(),
                                 value: cubit.dropdownValue,
-                                style: RecoverTextStyles.recoverRegularMontserrat(
+                                style:
+                                    RecoverTextStyles.recoverRegularMontserrat(
                                   color: Colors.white,
                                   fs: 12.0,
                                 ),

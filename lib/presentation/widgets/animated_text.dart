@@ -19,7 +19,7 @@ class _AnimatedTextState extends State<AnimatedText>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 1),
       vsync: this,
     );
     _animation = Tween(begin: 0.0, end: 1.0).animate(_controller);

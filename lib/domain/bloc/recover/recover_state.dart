@@ -35,6 +35,16 @@ class RecoverGetPatientsErrorState extends RecoverState {
 
   RecoverGetPatientsErrorState(this.error);
 }
+//////
+class RecoverGetDoctorsLoadingState extends RecoverState {}
+
+class RecoverGetDoctorsSuccessState extends RecoverState {}
+
+class RecoverGetDoctorsErrorState extends RecoverState {
+  final String error;
+
+  RecoverGetDoctorsErrorState(this.error);
+}
 
 //////
 class RecoverGetGamesLoadingState extends RecoverState {}
@@ -46,3 +56,4 @@ class RecoverGetGamesErrorState extends RecoverState {
 
   RecoverGetGamesErrorState(this.error);
 }
+class UpdateUseDefaultState extends RecoverState {}

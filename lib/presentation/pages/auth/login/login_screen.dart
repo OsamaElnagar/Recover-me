@@ -46,10 +46,20 @@ class LoginScreen extends StatelessWidget {
 
             if (isPatient == true) {
               RecoverCubit.get(context).getPatientData();
-              navigate2(context, const PatientPrefsScreen());
+              navigate2(
+                  context,
+                  PatientPrefsScreen(
+                    oldUser: true,
+                    patLoginModel: LoginCubit.get(context).patLoginModel,
+                  ));
             } else {
               RecoverCubit.get(context).getDoctorData();
-              navigate2(context, const DocProfAndImage());
+              navigate2(
+                  context,
+                  DocProfAndImage(
+                    oldUser: true,
+                    docLoginModel: LoginCubit.get(context).docLoginModel,
+                  ));
             }
             showToast(msg: 'login successfully', state: ToastStates.success);
           }
@@ -157,7 +167,7 @@ class LoginScreen extends StatelessWidget {
                           Center(
                             child: GestureDetector(
                               onTap: () {
-                                cubit.signInWithGoogle();
+                              //  cubit.signInWithGoogle();
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(5),
@@ -171,8 +181,8 @@ class LoginScreen extends StatelessWidget {
                                   children: [
                                     const CircleAvatar(
                                       radius: 15,
-                                      backgroundImage:
-                                        AssetImage('assets/images/google.jpg'),
+                                      backgroundImage: AssetImage(
+                                          'assets/images/google.jpg'),
                                     ),
                                     RecoverNormalTexts(
                                       norText: 'Sign in with Google',

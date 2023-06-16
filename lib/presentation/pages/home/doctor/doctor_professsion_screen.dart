@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recover_me/data/data_sources/consts.dart';
+import 'package:recover_me/data/models/doctor_login_model.dart';
 import 'package:recover_me/presentation/components/components.dart';
 import 'package:recover_me/presentation/pages/home/doctor/doctor_home_screen.dart';
 import 'package:recover_me/presentation/widgets/glassy.dart';
@@ -10,9 +12,14 @@ import 'package:recover_me/data/styles/fonts.dart';
 import 'package:recover_me/data/styles/paddings.dart';
 import 'package:recover_me/data/styles/texts.dart';
 import '../../../../../domain/bloc/doctor_register/doctor_register_cubit.dart';
+import '../../../../domain/bloc/recover/recover_cubit.dart';
 
 class DocProfAndImage extends StatefulWidget {
-  const DocProfAndImage({Key? key}) : super(key: key);
+  DocProfAndImage({Key? key, this.oldUser, this.docLoginModel})
+      : super(key: key);
+
+  bool? oldUser;
+  DoctorLoginModel? docLoginModel;
 
   @override
   State<DocProfAndImage> createState() => _DocProfAndImageState();
@@ -33,6 +40,7 @@ class _DocProfAndImageState extends State<DocProfAndImage> {
         },
         builder: (context, state) {
           var cubit = DoctorRegisterCubit.get(context);
+          var bigCubit = RecoverCubit.get(context);
           // String dropdownValue = cubit.trainings[0];
           return Scaffold(
               body: SafeArea(
@@ -74,62 +82,21 @@ class _DocProfAndImageState extends State<DocProfAndImage> {
                           children: [
                             InkWell(
                               onTap: () {
-                                showModalBottomSheet(
+                                buildShowModalBottomSheet(
                                   context: context,
-                                  builder: (context) => SizedBox(
-                                    height: 70,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        InkWell(
-                                          onTap: () {
-                                            cubit.getGalleryProfileImage();
-                                          },
-                                          child: Column(
-                                            children: [
-                                              RecoverNormalTexts(
-                                                  norText: 'Gallery',
-                                                  color: RecoverColors.myColor),
-                                              const SizedBox(
-                                                height: 5.0,
-                                              ),
-                                              const Icon(Icons.browse_gallery,
-                                                  color: Colors.yellow),
-                                            ],
-                                          ),
-                                        ),
-                                        Container(
-                                          padding: const EdgeInsets.all(5),
-                                          margin: const EdgeInsets.all(15),
-                                          width: 3,
-                                          height: 50,
-                                          color: RecoverColors.myColor,
-                                        ),
-                                        InkWell(
-                                          onTap: () {
-                                            cubit.getCameraProfileImage();
-                                          },
-                                          child: Column(
-                                            children: [
-                                              RecoverNormalTexts(
-                                                  norText: 'Camera',
-                                                  color: RecoverColors.myColor),
-                                              const SizedBox(
-                                                height: 5.0,
-                                              ),
-                                              const Icon(
-                                                Icons.camera_alt,
-                                                color: Colors.blue,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  onGalleryTap: () {
+                                    cubit.getGalleryProfileImage();
+                                    Navigator.pop(context);
+                                  },
+                                  onCameraTap: () {
+                                    cubit.getCameraProfileImage();
+                                    Navigator.pop(context);
+                                  },
+                                  onDefaultTap: () {
+                                    bigCubit.useDefault(collection:'doctors');
+                                    Navigator.pop(context);},
+                                  onDisplayTap: () { Navigator.pop(context);},
+                                  image: widget.docLoginModel!.profileImage,
                                 );
                               },
                               child: RecoverNormalTexts(
@@ -146,9 +113,12 @@ class _DocProfAndImageState extends State<DocProfAndImage> {
                                 radius: 45,
                                 backgroundImage: cubit.profileImageFile != null
                                     ? FileImage(cubit.profileImageFile!)
-                                    : const AssetImage(
-                                            'assets/images/doctor_avatar.jpg')
-                                        as ImageProvider,
+                                    : widget.docLoginModel != null
+                                        ? NetworkImage(
+                                            widget.docLoginModel!.profileImage!)
+                                        : const AssetImage(
+                                                'assets/images/doctor_avatar.jpg')
+                                            as ImageProvider,
                               ),
                             ),
                           ],
@@ -177,6 +147,7 @@ class _DocProfAndImageState extends State<DocProfAndImage> {
                           width: MediaQuery.of(context).size.width * .8,
                           child: Center(
                             child: DropdownButton<String>(
+                              dropdownColor: RecoverColors.myColor,
                               icon: const SizedBox(),
                               underline: const SizedBox(),
                               value: cubit.dropdownValue,

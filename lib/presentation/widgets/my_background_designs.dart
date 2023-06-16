@@ -13,7 +13,7 @@ Widget typeBackground({required Widget child, context, required String asset}) {
       ),
     ),
     child: BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+      filter: ImageFilter.blur(sigmaX: 6.0, sigmaY: 6.0),
       child: Center(child: child),
     ),
   );
