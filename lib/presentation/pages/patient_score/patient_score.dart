@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recover_me/presentation/components/components.dart';
+import 'package:recover_me/presentation/pages/home/doctor/doctor_home_screen.dart';
 import 'package:recover_me/presentation/pages/points_line_charts.dart';
 import 'package:recover_me/data/models/patient_login_model.dart';
 import 'package:recover_me/data/styles/paddings.dart';
@@ -159,7 +161,7 @@ class _PatientScoreState extends State<PatientScore> {
         return Scaffold(
           appBar: AppBar(
             leading: InkWell(
-              onTap: () => Navigator.pop(context),
+              onTap: () => navigate2(context, const DoctorHomeScreen()),
               child: const Icon(
                 Icons.arrow_back,
               ),

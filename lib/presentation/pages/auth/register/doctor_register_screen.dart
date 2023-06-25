@@ -249,12 +249,12 @@ class _DoctorRegisterScreenState extends State<DoctorRegisterScreen> {
                                           isPatient: false,
                                         ));
                                   },
-                                  child: RecoverHints(
-                                      hint: 'Sign in',
+                                  child: RecoverNormalTexts(
+                                      norText: 'Sign in',
                                       color: RecoverColors.myColor),
                                 ),
                                 const SizedBox(
-                                  height: 20,
+                                  height: 0,
                                 ),
                               ],
                             ),

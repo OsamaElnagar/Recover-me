@@ -86,178 +86,175 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> {
         var patientLoginModel = cubit.patientLoginModel;
 
         return Scaffold(
-          backgroundColor: Colors.black12,
-          body: SafeArea(
-            child: typeBackground(
-              context: context,
-              asset: 'assets/images/blue_gradient.jpg',
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: RecoverPaddings.recoverAuthPadding(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    //mainAxisSize: MainAxisSize.max,
-                    children: [
-                      const SizedBox(height: 5),
-                      glassyContainer(
-                        child: RecoverHeadlines(
-                          headline: 'Recover sphere profile',
-                          color: RecoverColors.recoverWhite,
-                          fs: 20,
-                        ),
+          body: typeBackground(
+            context: context,
+            asset: 'assets/images/blue_gradient.jpg',
+            child: RecoverPaddings.recoverAuthPadding(
+            child:SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child:  Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  //mainAxisSize: MainAxisSize.max,
+                  children: [
+                    const SizedBox(height: 15),
+                    glassyContainer(
+                      child: RecoverHeadlines(
+                        headline: 'Recover sphere profile',
+                        color: RecoverColors.recoverWhite,
+                        fs: 20,
                       ),
-                      const SizedBox(height: 20),
-                      InkWell(
-                        onTap: () {
-                          navigateTo(context, const PatientEditProfile());
-                        },
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: RecoverColors.myColor,
-                              width: 2.0,
-                            ),
-                            borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    const SizedBox(height: 20),
+                    InkWell(
+                      onTap: () {
+                        navigateTo(context, const PatientEditProfile());
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: RecoverColors.myColor,
+                            width: 2.0,
                           ),
-                          child: Row(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  RecoverHeadlines(
-                                    headline: 'Patient:',
-                                    color: RecoverColors.recoverWhite,
-                                    fs: 20,
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  RecoverNormalTexts(
-                                    norText: patientLoginModel!.name,
-                                    color: RecoverColors.recoverWhite,
-                                    fs: 16.0,
-                                    maxLines: 1,
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  RecoverHints(
-                                    hint: patientLoginModel.disability ?? '',
-                                    color: RecoverColors.recoverWhite,
-                                    fs: 15.0,
-                                    maxLines: 1,
-                                  ),
-                                ],
-                              ),
-                              const Spacer(),
-                              CircleAvatar(
-                                radius: MediaQuery.of(context).size.width / 10,
-                                backgroundColor: Colors.white,
-                                backgroundImage: CachedNetworkImageProvider(
-                                  patientLoginModel.profileImage,
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Row(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                RecoverHeadlines(
+                                  headline: 'Patient:',
+                                  color: RecoverColors.recoverWhite,
+                                  fs: 20,
                                 ),
-                                // child: CachedNetworkImage(
-                                //   imageUrl: dLModel.profileImage!,
-                                //   progressIndicatorBuilder:
-                                //       (context, url, progress) => Center(
-                                //     child: CircularProgressIndicator(
-                                //       value: progress.progress,
-                                //     ),
-                                //   ),
-                                //   fit: BoxFit.cover,
-                                // ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                RecoverNormalTexts(
+                                  norText: patientLoginModel!.name,
+                                  color: RecoverColors.recoverWhite,
+                                  fs: 16.0,
+                                  maxLines: 1,
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                RecoverHints(
+                                  hint: patientLoginModel.disability ?? '',
+                                  color: RecoverColors.recoverWhite,
+                                  fs: 15.0,
+                                  maxLines: 1,
+                                ),
+                              ],
+                            ),
+                            const Spacer(),
+                            CircleAvatar(
+                              radius: MediaQuery.of(context).size.width / 10,
+                              backgroundColor: Colors.white,
+                              backgroundImage: CachedNetworkImageProvider(
+                                patientLoginModel.profileImage,
                               ),
-                            ],
-                          ),
+                              // child: CachedNetworkImage(
+                              //   imageUrl: dLModel.profileImage!,
+                              //   progressIndicatorBuilder:
+                              //       (context, url, progress) => Center(
+                              //     child: CircularProgressIndicator(
+                              //       value: progress.progress,
+                              //     ),
+                              //   ),
+                              //   fit: BoxFit.cover,
+                              // ),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      glassyContainer(
-                        child: RecoverHeadlines(
-                          headline: 'Recover sphere doctors',
-                          color: RecoverColors.recoverWhite,
-                          fs: 20,
-                        ),
+                    ),
+                    const SizedBox(height: 20),
+                    glassyContainer(
+                      child: RecoverHeadlines(
+                        headline: 'Recover sphere doctors',
+                        color: RecoverColors.recoverWhite,
+                        fs: 20,
                       ),
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        height: 70,
-                        child: ListView.separated(
-                          physics: const BouncingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return buildDocAvatar(
-                              model: cubit.doctors[index],
-                              context: context,
-                            );
-                          },
-                          separatorBuilder: (context, index) =>
-                              const SizedBox(),
-                          itemCount: cubit.doctors.length,
-                        ),
+                    ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      height: 70,
+                      child: ListView.separated(
+                        physics: const BouncingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return buildDocAvatar(
+                            model: cubit.doctors[index],
+                            context: context,
+                          );
+                        },
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(),
+                        itemCount: cubit.doctors.length,
                       ),
-                      const SizedBox(height: 20),
-                      glassyContainer(
-                        child: RecoverHeadlines(
-                          headline: 'Recover sphere games',
-                          color: RecoverColors.recoverWhite,
-                          fs: 20,
-                        ),
+                    ),
+                    const SizedBox(height: 20),
+                    glassyContainer(
+                      child: RecoverHeadlines(
+                        headline: 'Recover sphere games',
+                        color: RecoverColors.recoverWhite,
+                        fs: 20,
                       ),
-                      const SizedBox(height: 20),
-                      Center(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            //color: Colors.grey,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15.0, vertical: 15.0),
-                            child: SmoothPageIndicator(
-                              controller: pageController,
-                              count: cubit.games.length,
-                              effect: const ExpandingDotsEffect(
-                                dotWidth: 16.0,
-                                dotHeight: 16.0,
-                                dotColor: Colors.grey,
-                                activeDotColor: RecoverColors.myColor,
-                                radius: 16.0,
-                                spacing: 6,
-                                expansionFactor: 4.0,
-                              ),
+                    ),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          //color: Colors.grey,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15.0, vertical: 15.0),
+                          child: SmoothPageIndicator(
+                            controller: pageController,
+                            count: cubit.games.length,
+                            effect: const ExpandingDotsEffect(
+                              dotWidth: 16.0,
+                              dotHeight: 16.0,
+                              dotColor: Colors.grey,
+                              activeDotColor: RecoverColors.myColor,
+                              radius: 16.0,
+                              spacing: 6,
+                              expansionFactor: 4.0,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        height: 400,
-                        child: PageView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          controller: pageController,
-                          onPageChanged: (value) {
-                            setState(() {
-                              // getPaletteColor(gameModel: cubit.games[value]);
-                            });
-                          },
-                          itemBuilder: (context, index) {
-                            return buildGameItem(
-                              gameModel: cubit.games[index],
-                              context: context,
-                            );
-                          },
-                          itemCount: cubit.games.length,
-                        ),
+                    ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      height: 400,
+                      child: PageView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        controller: pageController,
+                        onPageChanged: (value) {
+                          setState(() {
+                            // getPaletteColor(gameModel: cubit.games[value]);
+                          });
+                        },
+                        itemBuilder: (context, index) {
+                          return buildGameItem(
+                            gameModel: cubit.games[index],
+                            context: context,
+                          );
+                        },
+                        itemCount: cubit.games.length,
                       ),
-                      // const SizedBox(height: 0),
-                    ],
-                  ),
+                    ),
+                    // const SizedBox(height: 0),
+                  ],
                 ),
               ),
             ),

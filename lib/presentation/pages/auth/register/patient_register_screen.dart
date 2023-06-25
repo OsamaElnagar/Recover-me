@@ -245,15 +245,15 @@ class _PatientRegisterScreenState extends State<PatientRegisterScreen> {
                                           isPatient: true,
                                         ));
                                   },
-                                  child: RecoverHints(
-                                      hint: 'Sign in',
+                                  child: RecoverNormalTexts(
+                                      norText: 'Sign in',
                                       color: RecoverColors.myColor),
                                 ),
                               ],
                             ),
                           ),
                           const SizedBox(
-                            height: 20,
+                            height: 0,
                           ),
                         ],
                       ),

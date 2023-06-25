@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recover_me/data/models/doctor_login_model.dart';
 import '../../../presentation/components/components.dart';
@@ -11,8 +8,8 @@ import '../../../data/models/boardingModel.dart';
 import '../../../data/models/game_model.dart';
 import '../../../data/models/patient_login_model.dart';
 import '../../entities/cache_helper.dart';
-import 'dart:developer' as developer;
-import 'dart:ui' as ui;
+// import 'dart:developer' as developer;
+// import 'dart:ui' as ui;
 
 part 'recover_state.dart';
 
