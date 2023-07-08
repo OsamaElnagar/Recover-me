@@ -66,311 +66,317 @@ class _DoctorEditProfileState extends State<DoctorEditProfile> {
           return Scaffold(
             body: SafeArea(
               child: SingleChildScrollView(
-                child: typeBackground(
-                  context: context,
-                  asset: 'assets/images/type_background.jpg',
-                  child: RecoverPaddings.recoverAuthPadding(
-                    child: Form(
-                      key: formKey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          neumorphism(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          glassyContainer(
-                            child: RecoverHeadlines(
-                              headline: 'Update your account',
-                              color: RecoverColors.recoverWhite,
+                child: GestureDetector(
+                  onTap: () => unFocusNodes([emailNode,nameNode,phoneNode]),
+                  child: typeBackground(
+                    context: context,
+                    asset: 'assets/images/type_background.jpg',
+                    child: RecoverPaddings.recoverAuthPadding(
+                      child: Form(
+                        key: formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const SizedBox(
+                              height: 20,
                             ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          ConditionalBuilder(
-                            condition: cubit.doctorLoginModel != null,
-                            builder: (context) {
-                              return Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: RecoverTextFormField(
-                                          hintText:
-                                              cubit.doctorLoginModel!.name!,
-                                          controller: nameController,
-                                          keyboardType: TextInputType.name,
-                                          textInputAction: TextInputAction.next,
-                                          validator: (value) {
-                                            return null;
-
-                                            // if (value!.isEmpty) {
-                                            //   return ' name must not be empty';
-                                            // }
-                                            // return null;
-                                          },
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          CircleAvatar(
-                                            radius: 35,
-                                            backgroundImage: cubit
-                                                        .profileImageFile !=
-                                                    null
-                                                ? FileImage(
-                                                    cubit.profileImageFile!)
-                                                : CachedNetworkImageProvider(
-                                                        cubit.doctorLoginModel!
-                                                            .profileImage!)
-                                                    as ImageProvider,
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              buildShowModalBottomSheet(
-                                                context: context,
-                                                onGalleryTap: () {
-                                                  cubit
-                                                      .getGalleryProfileImage();
-                                                  Navigator.pop(context);
-                                                },
-                                                onCameraTap: () {
-                                                  cubit.getCameraProfileImage();
-                                                  Navigator.pop(context);
-                                                },
-                                                onDefaultTap: () {
-                                                  bigCubit.useDefault(
-                                                      collection: 'doctors');
-                                                  Navigator.pop(context);
-                                                },
-                                                onDisplayTap: () {},
-                                                image: cubit.doctorLoginModel!
-                                                    .profileImage!,
-                                              );
-                                            },
-                                            child: Icon(
-                                              Icons.camera_alt,
-                                              size: 30,
-                                              color:
-                                                  Colors.black.withOpacity(.6),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  RecoverTextFormField(
-                                    hintText: cubit.doctorLoginModel!.email!,
-                                    controller: emailController,
-                                    keyboardType: TextInputType.emailAddress,
-                                    textInputAction: TextInputAction.next,
-                                    validator: (value) {
-                                      return null;
-
-                                      // if (value!.isEmpty) {
-                                      //   return ' Email must not be empty';
-                                      // }
-                                      // return null;
-                                    },
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  RecoverTextFormField(
-                                    hintText:
-                                        cubit.doctorLoginModel!.phone != ''
-                                            ? cubit.doctorLoginModel!.phone!
-                                            : 'phone',
-                                    controller: phoneController,
-                                    keyboardType: TextInputType.phone,
-                                    textInputAction: TextInputAction.next,
-                                    validator: (value) {
-                                      return null;
-
-                                      // if (value!.isEmpty) {
-                                      //   return ' phone must not be empty';
-                                      // }
-                                      // return null;
-                                    },
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  // create a new account
-                                  Center(
-                                    child: recoverTextButton(
-                                      width: MediaQuery.of(context).size.width *
-                                          .6,
-                                      text: 'Update account',
-                                      onPressed: () {
-                                        if (formKey.currentState!.validate()) {
-                                          if (cubit.profileImageFile != null) {
-                                            cubit.updateOnlyDoProfileImage();
-                                          }
-
-                                          if (nameController.text != '' ||
-                                              emailController.text != '' ||
-                                              phoneController.text != '') {
-                                            cubit.updateDoctorProfile(
-                                              name: nameController.text != ''
-                                                  ? nameController.text
-                                                  : cubit
-                                                      .doctorLoginModel!.name,
-                                              email: emailController.text != ''
-                                                  ? emailController.text
-                                                  : cubit
-                                                      .doctorLoginModel!.email,
-                                              phone: phoneController.text != ''
-                                                  ? phoneController.text
-                                                  : cubit
-                                                      .doctorLoginModel!.phone,
-                                            );
-                                          }
-                                        }
-                                      },
-                                      buttonColor: RecoverColors.myColor,
-                                      textColor: Colors.white,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  if (state
-                                          is UpdateOnlyProfileImageLoadingState ||
-                                      state is UpdateProfileLoadingState)
-                                    const LinearProgressIndicator(
-                                      color: RecoverColors.myColor,
-                                    ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                ],
-                              );
-                            },
-                            fallback: (context) {
-                              return const Center(
-                                  child: CircularProgressIndicator());
-                            },
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              navigateTo(
-                                  context,
-                                  DocProfAndImage(
-                                    oldUser: true,
-                                    docLoginModel: cubit.doctorLoginModel,
-                                  ));
-                            },
-                            child: const Text(
-                              'I want to see my training!',
-                              style: TextStyle(
+                            neumorphism(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            glassyContainer(
+                              child: RecoverHeadlines(
+                                headline: 'Update your account',
                                 color: RecoverColors.recoverWhite,
-                                fontSize: 18.0,
-                                decoration: TextDecoration.underline,
-                                decorationThickness: 2.0,
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              ElevatedButton.icon(
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: RecoverColors.myColor),
-                                onPressed: () {
-                                  dialogMessage(
-                                    context: context,
-                                    title: const Text('Logout!'),
-                                    content: const Text('Are you sure!'),
-                                    actions: [
-                                      OutlinedButton(
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            ConditionalBuilder(
+                              condition: cubit.doctorLoginModel != null,
+                              builder: (context) {
+                                return Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: RecoverTextFormField(
+                                            focusNode: nameNode,
+                                            hintText:
+                                                cubit.doctorLoginModel!.name!,
+                                            controller: nameController,
+                                            keyboardType: TextInputType.name,
+                                            textInputAction: TextInputAction.next,
+                                            validator: (value) {
+                                              return null;
+
+                                              // if (value!.isEmpty) {
+                                              //   return ' name must not be empty';
+                                              // }
+                                              // return null;
+                                            },
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            CircleAvatar(
+                                              radius: 35,
+                                              backgroundImage: cubit
+                                                          .profileImageFile !=
+                                                      null
+                                                  ? FileImage(
+                                                      cubit.profileImageFile!)
+                                                  : CachedNetworkImageProvider(
+                                                          cubit.doctorLoginModel!
+                                                              .profileImage!)
+                                                      as ImageProvider,
+                                            ),
+                                            InkWell(
+                                              onTap: () {
+                                                buildShowModalBottomSheet(
+                                                  context: context,
+                                                  onGalleryTap: () {
+                                                    cubit
+                                                        .getGalleryProfileImage();
+                                                    Navigator.pop(context);
+                                                  },
+                                                  onCameraTap: () {
+                                                    cubit.getCameraProfileImage();
+                                                    Navigator.pop(context);
+                                                  },
+                                                  onDefaultTap: () {
+                                                    bigCubit.useDefault(
+                                                        collection: 'doctors');
+                                                    Navigator.pop(context);
+                                                  },
+                                                  onDisplayTap: () {},
+                                                  image: cubit.doctorLoginModel!
+                                                      .profileImage!,
+                                                );
+                                              },
+                                              child: Icon(
+                                                Icons.camera_alt,
+                                                size: 30,
+                                                color:
+                                                    Colors.black.withOpacity(.6),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    RecoverTextFormField(
+                                      focusNode: emailNode,
+                                      hintText: cubit.doctorLoginModel!.email!,
+                                      controller: emailController,
+                                      keyboardType: TextInputType.emailAddress,
+                                      textInputAction: TextInputAction.next,
+                                      validator: (value) {
+                                        return null;
+
+                                        // if (value!.isEmpty) {
+                                        //   return ' Email must not be empty';
+                                        // }
+                                        // return null;
+                                      },
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    RecoverTextFormField(
+                                      focusNode: phoneNode,
+                                      hintText:
+                                          cubit.doctorLoginModel!.phone != ''
+                                              ? cubit.doctorLoginModel!.phone!
+                                              : 'phone',
+                                      controller: phoneController,
+                                      keyboardType: TextInputType.phone,
+                                      textInputAction: TextInputAction.next,
+                                      validator: (value) {
+                                        return null;
+
+                                        // if (value!.isEmpty) {
+                                        //   return ' phone must not be empty';
+                                        // }
+                                        // return null;
+                                      },
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    // create a new account
+                                    Center(
+                                      child: recoverTextButton(
+                                        width: MediaQuery.of(context).size.width *
+                                            .6,
+                                        text: 'Update account',
                                         onPressed: () {
-                                          Navigator.pop(context);
+                                          if (formKey.currentState!.validate()) {
+                                            if (cubit.profileImageFile != null) {
+                                              cubit.updateOnlyDoProfileImage();
+                                            }
+
+                                            if (nameController.text != '' ||
+                                                emailController.text != '' ||
+                                                phoneController.text != '') {
+                                              cubit.updateDoctorProfile(
+                                                name: nameController.text != ''
+                                                    ? nameController.text
+                                                    : cubit
+                                                        .doctorLoginModel!.name,
+                                                email: emailController.text != ''
+                                                    ? emailController.text
+                                                    : cubit
+                                                        .doctorLoginModel!.email,
+                                                phone: phoneController.text != ''
+                                                    ? phoneController.text
+                                                    : cubit
+                                                        .doctorLoginModel!.phone,
+                                              );
+                                            }
+                                          }
                                         },
-                                        style: OutlinedButton.styleFrom(
-                                            backgroundColor: Colors.white),
-                                        child: const Text('No'),
+                                        buttonColor: RecoverColors.myColor,
+                                        textColor: Colors.white,
                                       ),
-                                      OutlinedButton(
-                                        onPressed: () {
-                                          cubit.logout(context);
-                                        },
-                                        style: OutlinedButton.styleFrom(
-                                            backgroundColor: Colors.red),
-                                        child: const Text('Yes'),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    if (state
+                                            is UpdateOnlyProfileImageLoadingState ||
+                                        state is UpdateProfileLoadingState)
+                                      const LinearProgressIndicator(
+                                        color: RecoverColors.myColor,
                                       ),
-                                    ],
-                                  );
-                                },
-                                icon: const Icon(
-                                  Icons.logout,
-                                  size: 24.0,
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                  ],
+                                );
+                              },
+                              fallback: (context) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              },
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                navigateTo(
+                                    context,
+                                    DocProfAndImage(
+                                      oldUser: true,
+                                      docLoginModel: cubit.doctorLoginModel,
+                                    ));
+                              },
+                              child: const Text(
+                                'I want to see my training!',
+                                style: TextStyle(
+                                  color: RecoverColors.recoverWhite,
+                                  fontSize: 18.0,
+                                  decoration: TextDecoration.underline,
+                                  decorationThickness: 2.0,
                                 ),
-                                label: const Text('Log out'), // <-- Text
                               ),
-                              ElevatedButton.icon(
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: RecoverColors.myColor),
-                                onPressed: () {
-                                  dialogMessage(
-                                    context: context,
-                                    title: const Text('Delete account!'),
-                                    content: const Text('Are you sure!'),
-                                    actions: [
-                                      OutlinedButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        style: OutlinedButton.styleFrom(
-                                            backgroundColor: Colors.white),
-                                        child: const Text('No'),
-                                      ),
-                                      OutlinedButton(
-                                        onPressed: () {
-                                          cubit.deleteDoctorAccount(context);
-                                        },
-                                        style: OutlinedButton.styleFrom(
-                                            backgroundColor: Colors.red),
-                                        child: const Text('Yes'),
-                                      ),
-                                    ],
-                                  );
-                                  //cubit.deletePatientAccount(context);
-                                },
-                                icon: const Icon(
-                                  Icons.delete_forever,
-                                  size: 24.0,
+                            ),
+                            const SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                ElevatedButton.icon(
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: RecoverColors.myColor),
+                                  onPressed: () {
+                                    dialogMessage(
+                                      context: context,
+                                      title: 'Logout!',
+                                      content: 'Are you sure!',
+                                      actions: [
+                                        OutlinedButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          style: OutlinedButton.styleFrom(
+                                              backgroundColor: Colors.white),
+                                          child: const Text('No'),
+                                        ),
+                                        OutlinedButton(
+                                          onPressed: () {
+                                            cubit.logout(context);
+                                          },
+                                          style: OutlinedButton.styleFrom(
+                                              backgroundColor: Colors.red),
+                                          child: const Text('Yes'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                  icon: const Icon(
+                                    Icons.logout,
+                                    size: 24.0,
+                                  ),
+                                  label: const Text('Log out'), // <-- Text
                                 ),
-                                label: const Text('Delete account'), // <-- Text
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              if (state is UpdateSignOutLoadingState ||
-                                  state is DeleteAccountLoadingState)
-                                const LinearProgressIndicator(
-                                  color: RecoverColors.myColor,
-                                )
-                            ],
-                          ),
-                        ],
+                                ElevatedButton.icon(
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: RecoverColors.myColor),
+                                  onPressed: () {
+                                    dialogMessage(
+                                      context: context,
+                                      title:'Delete account!',
+                                      content: 'Are you sure!',
+                                      actions: [
+                                        OutlinedButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          style: OutlinedButton.styleFrom(
+                                              backgroundColor: Colors.white),
+                                          child: const Text('No'),
+                                        ),
+                                        OutlinedButton(
+                                          onPressed: () {
+                                            cubit.deleteDoctorAccount(context);
+                                          },
+                                          style: OutlinedButton.styleFrom(
+                                              backgroundColor: Colors.red),
+                                          child: const Text('Yes'),
+                                        ),
+                                      ],
+                                    );
+                                    //cubit.deletePatientAccount(context);
+                                  },
+                                  icon: const Icon(
+                                    Icons.delete_forever,
+                                    size: 24.0,
+                                  ),
+                                  label: const Text('Delete account'), // <-- Text
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                if (state is UpdateSignOutLoadingState ||
+                                    state is DeleteAccountLoadingState)
+                                  const LinearProgressIndicator(
+                                    color: RecoverColors.myColor,
+                                  )
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

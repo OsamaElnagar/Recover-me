@@ -1,14 +1,20 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:recover_me/data/models/patient_login_model.dart';
+import 'package:recover_me/domain/bloc/recover/recover_cubit.dart';
 import 'package:recover_me/presentation/pages/patient_score/patient_score.dart';
 import 'package:rive/rive.dart' as rive;
+import '../../../data/models/game_model.dart';
 import '../../components/components.dart';
 
 class PreScoreAnimation extends StatefulWidget {
   PatientLoginModel patientLoginModel;
+  final GameModel gameModel;
 
-  PreScoreAnimation({super.key, required this.patientLoginModel});
+  PreScoreAnimation(
+      {super.key, required this.patientLoginModel, required this.gameModel});
 
   @override
   State<PreScoreAnimation> createState() => _PreScoreAnimationState();
@@ -17,8 +23,16 @@ class PreScoreAnimation extends StatefulWidget {
 class _PreScoreAnimationState extends State<PreScoreAnimation> {
   void startScoreSplash() {
     Timer(const Duration(seconds: 5), () {
+      RecoverCubit.get(context).getScoresMap(
+        gameName: widget.gameModel.name,
+        pLModel: widget.patientLoginModel,
+      );
       navigate2(
-          context, PatientScore(patientLoginModel: widget.patientLoginModel));
+          context,
+          PatientScore(
+            patientLoginModel: widget.patientLoginModel,
+            gameModel: widget.gameModel,
+          ));
     });
   }
 

@@ -21,6 +21,7 @@ class RecoverTextFormField extends StatelessWidget {
     this.onChanged,
     this.keyboardType,
     this.textInputAction,
+    this.height,
   }) : super(key: key);
 
   final String hintText;
@@ -32,11 +33,12 @@ class RecoverTextFormField extends StatelessWidget {
   dynamic keyboardType;
   final FocusNode? focusNode;
   TextInputAction? textInputAction;
-
+double? height;
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70,
+      alignment: Alignment.center,
+      height:height?? 50,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
@@ -53,18 +55,18 @@ class RecoverTextFormField extends StatelessWidget {
         decoration: InputDecoration(
             // label: RecoverHints(hint: label!),
             focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: RecoverColors.recoverWhite),
+              borderSide: BorderSide(color: RecoverColors.recoverWhite,width: 0),
               borderRadius: BorderRadius.all(Radius.circular(15)),
             ),
             enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: RecoverColors.recoverGrey),
+              borderSide: BorderSide(color: RecoverColors.myColor,width: 0),
               borderRadius: BorderRadius.all(Radius.circular(15)),
             ),
             hintText: hintText,
             hintStyle: GoogleFonts.montserrat(
                 color: RecoverColors.recoverWhite, fontWeight: FontWeight.w600),
             focusColor: RecoverColors.recoverWhite,
-            contentPadding: const EdgeInsets.all(30)),
+            contentPadding:  const EdgeInsets.only(left: 5,right: 5)),
         validator: validator,
         onFieldSubmitted: onFieldSubmitted,
         onChanged: onChanged,
@@ -157,7 +159,7 @@ class RecoverPhoneFormField extends StatelessWidget {
                   hintStyle: GoogleFonts.montserrat(
                       color: RecoverColors.recoverWhite, fontWeight: FontWeight.w600),
                   focusColor: RecoverColors.recoverWhite,
-                  contentPadding: const EdgeInsets.all(30)),
+                  contentPadding:  const EdgeInsets.only(left: 5,right: 5)),
               validator: validator,
               onFieldSubmitted: onFieldSubmitted,
               onChanged: onChanged,

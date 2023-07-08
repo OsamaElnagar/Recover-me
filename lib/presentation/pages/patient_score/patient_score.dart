@@ -1,5 +1,11 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings, deprecated_member_use
+
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recover_me/data/models/game_model.dart';
+import 'package:recover_me/data/styles/form_fields.dart';
 import 'package:recover_me/presentation/components/components.dart';
 import 'package:recover_me/presentation/pages/home/doctor/doctor_home_screen.dart';
 import 'package:recover_me/presentation/pages/points_line_charts.dart';
@@ -8,17 +14,20 @@ import 'package:recover_me/data/styles/paddings.dart';
 import 'package:recover_me/data/styles/texts.dart';
 import 'package:recover_me/domain/bloc/recover/recover_cubit.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../../data/models/score_model.dart';
 import '../../../../data/styles/colors.dart';
 import 'package:recover_me/presentation/manager/dateTime_manager.dart'
     as date_util;
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../../data/data_sources/consts.dart';
+
 
 class PatientScore extends StatefulWidget {
-  const PatientScore({Key? key, required this.patientLoginModel})
+  const PatientScore(
+      {Key? key, required this.patientLoginModel, required this.gameModel})
       : super(key: key);
 
   final PatientLoginModel patientLoginModel;
+  final GameModel gameModel;
 
   @override
   State<PatientScore> createState() => _PatientScoreState();
@@ -31,17 +40,56 @@ class _PatientScoreState extends State<PatientScore> {
 
   late ScrollController scrollController;
   late ScrollController horizontalScrollController;
+  TextEditingController scoreController = TextEditingController();
+  TextEditingController sessionController = TextEditingController();
   List<DateTime> currentMonthList = List.empty();
   DateTime currentDateTime = DateTime.now();
   List<String> todos = <String>[];
   TextEditingController controller = TextEditingController();
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  var formKey = GlobalKey<FormState>();
   final scrollKey = GlobalKey();
   final double _dayItemWidth = 60.0;
   int taskIndex = 0;
+  FocusNode scoreNode = FocusNode();
+  FocusNode sessionNode = FocusNode();
+
+  void startGraph() {
+    Timer(const Duration(seconds: 2), () {
+      if (RecoverCubit.get(context).mapData.isEmpty) {
+        dialogMessage(
+          context: context,
+          title: 'Graph setup!',
+          content: 'activate this graph (Recommended)',
+          actions: [
+            OutlinedButton(
+              onPressed: () {
+                RecoverCubit.get(context).updateScoresMap(
+                  gameName: widget.gameModel.name,
+                  pLModel: widget.patientLoginModel,
+                  score: {'0': '0'},
+                  context: context,
+                );
+                scoreController.clear();
+                Navigator.pop(context);
+                FocusScope.of(context).unfocus();
+              },
+              style: OutlinedButton.styleFrom(
+                  backgroundColor: RecoverColors.recoverCelestialBlue),
+              child: const Text(
+                'Yes',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      }
+    });
+  }
 
   @override
   void initState() {
+    startGraph();
     currentMonthList = date_util.DateUtils.daysInMonth(currentDateTime);
     currentMonthList.sort((a, b) => a.day.compareTo(b.day));
     currentMonthList = currentMonthList.toSet().toList();
@@ -144,12 +192,21 @@ class _PatientScoreState extends State<PatientScore> {
     );
   }
 
+
   @override
   void dispose() {
     _countryCodeController.dispose();
     _phoneController.dispose();
     _messageController.dispose();
     super.dispose();
+  }
+
+  bool isPureNumber(String input) {
+    // Regular expression pattern to match only digits
+    RegExp regex = RegExp(r'^\d+$');
+
+    // Check if the input matches the pattern
+    return regex.hasMatch(input);
   }
 
   @override
@@ -195,7 +252,9 @@ class _PatientScoreState extends State<PatientScore> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(right: 14.0),
-                    child: SizedBox(width: 40, child: SvgPicture.asset('assets/images/whatsapp.svg')),
+                    child: SizedBox(
+                        width: 40,
+                        child: SvgPicture.asset('assets/images/whatsapp.svg')),
                   ),
                 ),
               ),
@@ -206,26 +265,152 @@ class _PatientScoreState extends State<PatientScore> {
             child: RecoverPaddings.recoverAuthPadding(
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
-                child: Column(
-                  children: [
-                    todayView(),
-                    const SizedBox(height: 20),
-                    horizontalCapsuleListView(),
-                    const SizedBox(height: 20),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 400,
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: RecoverColors.myColor,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
+                child: GestureDetector(
+                  onTap: () => unFocusNodes([scoreNode, sessionNode]),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          RecoverNormalTexts(
+                            norText: widget.gameModel.name,
+                            color: RecoverColors.myColor,
+                          ),
+                          const Spacer(),
+                          todayView(),
+                        ],
                       ),
-                      child: LineChartsWidget(points: scores),
-                    ),
-                  ],
+                      const SizedBox(height: 20),
+                      horizontalCapsuleListView(),
+                      const SizedBox(height: 20),
+                      const LineChartsWidget(),
+                      Form(
+                        key: formKey,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 12.0, bottom: 5),
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            // height: 50,
+                            child: Center(
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width / 2,
+                                    child: RecoverTextFormField(
+                                      focusNode: scoreNode,
+                                      hintText: 'new score?',
+                                      controller: scoreController,
+                                      keyboardType: TextInputType.number,
+                                      height: 50.0,
+                                      textInputAction: TextInputAction.next,
+                                      validator: (String? input) {
+                                        if (!isPureNumber(input!)) {
+                                          return 'Please enter a pure number.';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                  ),
+                                  recoverSpacer(height: 5.0),
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width / 2,
+                                    child: RecoverTextFormField(
+                                      focusNode: sessionNode,
+                                      hintText: 'session number?',
+                                      controller: sessionController,
+                                      keyboardType: TextInputType.number,
+                                      height: 50.0,
+                                      textInputAction: TextInputAction.send,
+                                      validator: (String? input) {
+                                        if (!isPureNumber(input!)) {
+                                          return 'Please enter a pure number.';
+                                        }
+                                        return null;
+                                      },
+                                      onFieldSubmitted: (String value) {
+                                       if (formKey.currentState!.validate()) {
+                                         Map sessionScore = {
+                                           sessionController.text:
+                                           scoreController.text
+                                         };
+                                         dialogMessage(
+                                           context: context,
+                                           title: 'New score',
+                                           content:
+                                           'Put ${scoreController.text} as new score?',
+                                           actions: [
+                                             OutlinedButton(
+                                               onPressed: () {
+                                                 Navigator.pop(context);
+                                               },
+                                               style: OutlinedButton.styleFrom(
+                                                   backgroundColor:
+                                                   Colors.white),
+                                               child: const Text('No'),
+                                             ),
+                                             OutlinedButton(
+                                               onPressed: () async {
+                                                 Future.wait(
+                                                   [
+                                                     cubit.updateScoresMap(
+                                                       context: context,
+                                                       gameName:
+                                                       widget.gameModel.name,
+                                                       pLModel: widget
+                                                           .patientLoginModel,
+                                                       score: sessionScore,
+                                                     ),
+                                                     cubit.getScoresMap(
+                                                       gameName:
+                                                       widget.gameModel.name,
+                                                       pLModel: widget
+                                                           .patientLoginModel,
+                                                     ),
+                                                   ],
+                                                 );
+                                                 if (cubit.isCritical) {
+                                                   dialogMessage(
+                                                       context: context,
+                                                       title: urgentAlert,
+                                                       content:
+                                                       urgentAlertContent,
+                                                       actions: []);
+                                                 }
+                                                 scoreController.clear();
+                                                 sessionController.clear();
+                                                 Navigator.pop(context);
+                                                 FocusScope.of(context)
+                                                     .unfocus();
+                                               },
+                                               style: OutlinedButton.styleFrom(
+                                                   backgroundColor:
+                                                   RecoverColors.myColor),
+                                               child: const Text(
+                                                 'Yes',
+                                                 style: TextStyle(
+                                                     color: Colors.white),
+                                               ),
+                                             ),
+                                           ],
+                                         );
+                                       }
+                                      },
+                                    ),
+                                  ),
+                                  recoverSpacer(height: 5.0),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (state is RecoverUpdateScoresLoadingState)
+                        const LinearProgressIndicator(
+                          color: RecoverColors.myColor,
+                        ),
+                    ],
+                  ),
                 ),
               ),
             ),

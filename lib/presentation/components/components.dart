@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recover_me/data/styles/colors.dart';
-
 import '../../data/styles/texts.dart';
-import '../pages/home/patient/patient_home_screen.dart';
 import '../widgets/outlined_container.dart';
 
 void navigateTo(context, widget) => Navigator.push(
@@ -90,18 +88,34 @@ void pint(String text) {
 
 void dialogMessage({
   required BuildContext context,
-  required Widget title,
-  required Widget content,
+  required dynamic title,
+  required dynamic content,
   required List<Widget> actions,
   Color? barrierColor,
+  Color? contentColor,
 }) {
   showDialog<String>(
-      barrierColor:barrierColor?? RecoverColors.recoverCelestialBlue.withOpacity(.4),
+      barrierColor:
+          barrierColor ?? RecoverColors.recoverCelestialBlue.withOpacity(.4),
       context: context,
       builder: (BuildContext context) => AlertDialog(
             backgroundColor: RecoverColors.myColor,
-            title: title,
-            content: content,
+            title: (title is Widget)
+                ? title
+                : Text(
+                    title,
+                    style: TextStyle(
+                      color: contentColor ?? Colors.white,
+                    ),
+                  ),
+            content: (content is Widget)
+                ? content
+                : Text(
+                    content,
+                    style: const TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
             actions: actions,
           ));
 }
@@ -322,5 +336,11 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
         ),
       ),
     );
+  }
+}
+
+void unFocusNodes(List<FocusNode> nodes) {
+  for (var node in nodes) {
+    node.unfocus();
   }
 }

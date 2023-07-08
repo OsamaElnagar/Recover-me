@@ -1,20 +1,9 @@
-import 'package:collection/collection.dart';
 
 class ScorePointsModel {
   final double x;
   final double y;
 
   ScorePointsModel({required this.x, required this.y});
-}
-
-List<ScorePointsModel> get scores {
-  final data = <double>[4, 30, 35, 17, 45, 55, 23, 19, 20, 33, 22, 40];
-  return data
-      .mapIndexed(
-        (index, element) => ScorePointsModel(
-          x: index.toDouble(),
-          y: element,
-        )).toList();
 }
 
 class ScoreModel {

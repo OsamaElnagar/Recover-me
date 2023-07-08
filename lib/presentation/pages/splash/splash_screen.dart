@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recover_me/presentation/widgets/animated_text.dart';
 import 'package:recover_me/domain/bloc/recover/recover_cubit.dart';
-import '../../../../data/styles/colors.dart';
 import '../../components/components.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 class AppSplashScreen extends StatefulWidget {

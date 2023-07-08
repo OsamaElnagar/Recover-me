@@ -14,6 +14,7 @@ class RecoverGetDocDataErrorState extends RecoverState {
 
   RecoverGetDocDataErrorState(this.error);
 }
+
 //////
 class RecoverGetPatientDataLoadingState extends RecoverState {}
 
@@ -35,6 +36,7 @@ class RecoverGetPatientsErrorState extends RecoverState {
 
   RecoverGetPatientsErrorState(this.error);
 }
+
 //////
 class RecoverGetDoctorsLoadingState extends RecoverState {}
 
@@ -56,4 +58,26 @@ class RecoverGetGamesErrorState extends RecoverState {
 
   RecoverGetGamesErrorState(this.error);
 }
+
 class UpdateUseDefaultState extends RecoverState {}
+
+/////////
+class RecoverGetScoresLoadingState extends RecoverState {}
+
+class RecoverGetScoresSuccessState extends RecoverState {}
+
+class RecoverGetScoresErrorState extends RecoverState {
+  final String error;
+
+  RecoverGetScoresErrorState(this.error);
+}
+
+/////////
+class RecoverUpdateScoresLoadingState extends RecoverState {}
+
+class RecoverUpdateScoresSuccessState extends RecoverState {}
+
+class RecoverUpdateScoresErrorState extends RecoverState {
+  final String error;
+  RecoverUpdateScoresErrorState(this.error);
+}

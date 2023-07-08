@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -272,7 +274,7 @@ Widget buildGameItem(
       dialogMessage(
         barrierColor: Colors.black.withBlue(32),
         context: context,
-        title: RecoverHeadlines(headline: gameModel.name ?? '', fs: 20.0),
+        title: RecoverHeadlines(headline: gameModel.name, fs: 20.0),
         content: SingleChildScrollView(
           child: Text(
             gameModel.description,

@@ -6,7 +6,6 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:recover_me/presentation/components/components.dart';
 import 'package:recover_me/presentation/pages/error_occurred/error_occurred.dart';
 import 'package:recover_me/presentation/pages/home/doctor/doctor_edit_profile.dart';
-import 'package:recover_me/presentation/pages/patient_score/patient_score.dart';
 import 'package:recover_me/data/models/patient_login_model.dart';
 import 'package:recover_me/data/styles/paddings.dart';
 import 'package:recover_me/data/styles/texts.dart';
@@ -16,7 +15,6 @@ import 'package:recover_me/presentation/widgets/glassy.dart';
 import 'package:recover_me/presentation/widgets/my_background_designs.dart';
 import '../../../../../data/models/game_model.dart';
 import '../../../../../data/styles/colors.dart';
-import '../../../widgets/my_loading.dart';
 import '../../patient_score/pre_score_animation.dart';
 
 class DoctorHomeScreen extends StatefulWidget {
@@ -72,13 +70,15 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
           condition: dLModel != null,
           builder: (context) {
             return Scaffold(
-              body: typeBackground(
-                asset: 'assets/images/blue_gradient.jpg',
-                context: context,
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: RecoverPaddings.recoverAuthPadding(
-                      child:  Column(
+              body: GestureDetector(
+
+                child: typeBackground(
+                  asset: 'assets/images/blue_gradient.jpg',
+                  context: context,
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: RecoverPaddings.recoverAuthPadding(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -109,7 +109,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                                 children: [
                                   Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       RecoverHeadlines(
                                         headline: 'Doctor:',
@@ -139,11 +139,9 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                                   const Spacer(),
                                   CircleAvatar(
                                     radius:
-                                    MediaQuery.of(context).size.width /
-                                        10,
+                                        MediaQuery.of(context).size.width / 10,
                                     backgroundColor: Colors.white,
-                                    backgroundImage:
-                                    CachedNetworkImageProvider(
+                                    backgroundImage: CachedNetworkImageProvider(
                                       dLModel.profileImage!,
                                     ),
                                     // child: CachedNetworkImage(
@@ -198,8 +196,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                               child: SizedBox(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     const Icon(
                                       Icons.hourglass_empty,
@@ -208,7 +205,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                                     ),
                                     RecoverHints(
                                       hint:
-                                      'It seems that no patients has registered yet!\n Try to invite some.',
+                                          'It seems that no patients has registered yet!\n Try to invite some.',
                                       color: RecoverColors.myColor,
                                     ),
                                   ],
@@ -221,7 +218,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
                     ),
                   ),
                 ),
-
+              ),
             );
           },
           fallback: (context) {
@@ -233,7 +230,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> {
   }
 }
 
-class BuildPatientItem extends StatelessWidget {
+class BuildPatientItem extends StatefulWidget {
   PatientLoginModel patientLoginModel;
 
   BuildPatientItem({
@@ -241,6 +238,11 @@ class BuildPatientItem extends StatelessWidget {
     required this.patientLoginModel,
   });
 
+  @override
+  State<BuildPatientItem> createState() => _BuildPatientItemState();
+}
+
+class _BuildPatientItemState extends State<BuildPatientItem> {
   RelativeRect get relRectSize =>
       RelativeRect.fromSize(tapXY & const Size(40, 40), overlay!.size);
 
@@ -256,73 +258,127 @@ class BuildPatientItem extends StatelessWidget {
   Widget build(BuildContext context) {
     overlay = Overlay.of(context).context.findRenderObject() as RenderBox?;
 
-    return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: RecoverColors.myColor,
-          width: 2.0,
+    return GestureDetector(
+      onTap: () {
+
+        RecoverCubit.get(context).getScoresMap(gameName: 'Piano game', pLModel: widget.patientLoginModel);
+      //   String? chooseGame = 'Piano game';
+      //   dialogMessage(
+      //   context: context,
+      //   title: 'Check case',
+      //   content: SizedBox(
+      //     height: 80,
+      //     child: Column(
+      //       children: [
+      //         const Text('check for decrease in scores'),
+      //         Center(
+      //           child: DropdownButton<String>(
+      //             dropdownColor: RecoverColors.myColor,
+      //             underline: const SizedBox(),
+      //             value: chooseGame,
+      //             style: RecoverTextStyles.recoverRegularMontserrat(
+      //               color: Colors.white,
+      //               fs: 12.0,
+      //             ),
+      //
+      //             onChanged: (String? value) {
+      //              setState(() {
+      //                chooseGame = value;
+      //              });
+      //             },
+      //             items: RecoverCubit.get(context)
+      //                 .gamesName
+      //                 .map<DropdownMenuItem<String>>((String value) {
+      //               return DropdownMenuItem<String>(
+      //                 value: value,
+      //                 child: Text(value),
+      //               );
+      //             }).toList(),
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      //   actions: [
+      //     OutlinedButton(
+      //       onPressed: () {},
+      //       style: OutlinedButton.styleFrom(backgroundColor: Colors.red),
+      //       child: const Text('Yes'),
+      //     ),
+      //   ],
+      // );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: RecoverColors.myColor,
+            width: 2.0,
+          ),
+          borderRadius: BorderRadius.circular(10.0),
         ),
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundImage: NetworkImage(patientLoginModel.profileImage),
-            radius: 30,
-          ),
-          const SizedBox(width: 20),
-          RecoverNormalTexts(
-            norText: patientLoginModel.name,
-            color: RecoverColors.recoverWhite,
-          ),
-          const Spacer(),
-          InkWell(
-            onTapDown: getPosition,
-            onTap: () {
-              showMenu(
-                  color: RecoverColors.myColor,
-                  context: context,
-                  position: relRectSize,
-                  items: games
-                      .map((game) => PopupMenuItem(
-                            child: InkWell(
-                              onTap: () {
-                                pint('tapped game');
-                                Navigator.pop(context);
-                                navigateTo(
+        child: Row(
+          children: [
+            CircleAvatar(
+              backgroundImage: NetworkImage(widget.patientLoginModel.profileImage),
+              radius: 30,
+            ),
+            const SizedBox(width: 20),
+            RecoverNormalTexts(
+              norText: widget.patientLoginModel.name,
+              color: RecoverColors.recoverWhite,
+            ),
+            const Spacer(),
+            InkWell(
+              onTapDown: getPosition,
+              onTap: () {
+                showMenu(
+                    color: RecoverColors.myColor,
+                    context: context,
+                    position: relRectSize,
+                    items: games
+                        .map((game) => PopupMenuItem(
+                              child: InkWell(
+                                onTap: () {
+                                  pint('tapped game');
+                                  Navigator.pop(context);
+                                  navigateTo(
                                     context,
                                     PreScoreAnimation(
-                                      patientLoginModel: patientLoginModel,
-                                    ));
-                              },
-                              child: Row(
-                                children: [
-                                  CircleAvatar(
-                                    backgroundImage: CachedNetworkImageProvider(
-                                        game.image),
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  RecoverHints(
-                                      hint: game.name, color: Colors.white),
-                                ],
+                                      patientLoginModel: widget.patientLoginModel,
+                                      gameModel: game,
+                                    ),
+                                  );
+                                },
+                                child: Row(
+                                  children: [
+                                    CircleAvatar(
+                                      backgroundImage:
+                                          CachedNetworkImageProvider(
+                                              game.image),
+                                    ),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    RecoverHints(
+                                        hint: game.name, color: Colors.white),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ))
-                      .toList());
-            },
-            child: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Icon(
-                Icons.arrow_drop_down_circle_rounded,
-                color: RecoverColors.myColor,
-                size: 30,
+                            ))
+                        .toList());
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.arrow_drop_down_circle_rounded,
+                  color: RecoverColors.recoverWhite,
+                  size: 30,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

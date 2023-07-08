@@ -8,6 +8,9 @@ DoctorLoginModel? doctorLoginModel0;
 PatientLoginModel? patientLoginModel0;
 String defaultDocPhoto = 'https://firebasestorage.googleapis.com/v0/b/recoverme-a017c.appspot.com/o/app%20assets%2Fdoctor.jpg?alt=media&token=c1ac7d62-b6dd-4e2b-902d-89d235cfdb3a';
 String defaultPatPhoto ='https://firebasestorage.googleapis.com/v0/b/recoverme-a017c.appspot.com/o/app%20assets%2Fpatient.jpg?alt=media&token=aaf34286-9233-4195-88e8-2ce68badc5bc';
+String urgentAlert = 'Urgent Alert!';
+String urgentAlertContent = 'Score Decrease in VR Games Rehabilitation';
+
 
 List<Map<String, String>> countryCodes = [
   {

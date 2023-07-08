@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:recover_me/data/styles/colors.dart';
 import 'package:recover_me/presentation/widgets/my_background_designs.dart';
@@ -214,7 +216,7 @@ class _MyScrollIndicatorState extends State<MyScrollIndicator> {
               itemCount: 100,
               itemBuilder: (context, index) {
                 currentIndex = index;
-                return Container(
+                return SizedBox(
                   height: 60.0,
                     child: Text('Item $index'));
               },
