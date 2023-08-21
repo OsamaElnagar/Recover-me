@@ -12,7 +12,6 @@ import '../../components/components.dart';
 import '../../widgets/build_onBoarding_item.dart';
 import '../../widgets/recover_text_button.dart';
 
-
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({Key? key}) : super(key: key);
 
@@ -59,6 +58,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
     super.initState();
   }
 
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
+
   Color paletteColor() {
     return paletteGenerator != null
         ? paletteGenerator!.dominantColor != null
@@ -75,7 +80,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
         var cubit = RecoverCubit.get(context);
         return Scaffold(
           backgroundColor: paletteColor(),
-
           body: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -130,10 +134,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                 ? FloatingActionButton(
                     backgroundColor: Colors.white,
                     onPressed: () {
-                        pageController.nextPage(
-                          duration: const Duration(milliseconds: 700),
-                          curve: Curves.ease,
-                        );
+                      pageController.nextPage(
+                        duration: const Duration(milliseconds: 700),
+                        curve: Curves.ease,
+                      );
                     },
                     child: Icon(
                       Icons.arrow_forward_ios,
